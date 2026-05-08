@@ -1,0 +1,58 @@
+<html>
+    <head>
+<link href="estilo.css" rel="stylesheet" />
+</head>
+
+    <head><title>Calculadora</title></head>
+<body>
+        <input type="text" name="val1"  />
+        <div id="op">?</div>
+     <input type="text" name="val2"  />
+     <br />
+    <button onclick="soma()">+</button>
+    <button onclick="sub()">-</button>
+    <button onclick="multi()">x</button>
+    <button onclick="divi()">/</button>
+    <br />
+    <input type="text" name="res" readonly />
+        <script>
+        function soma() {
+            document.getElementById('op').innerHTML='+'
+            let vals = getVals()
+            let res = document.getElementsByName('res')[0]
+            res.value = Number(vals.val1) + Number(vals.val2)
+        }
+        function sub() {
+            document.getElementById('op').innerHTML='-'
+            let vals = getVals()
+            let res = document.getElementsByName('res')[0]
+            res.value = Number(vals.val1) - Number(vals.val2)
+        }
+        function multi() {
+            document.getElementById('op').innerHTML='x'
+            let vals = getVals()
+            let res = document.getElementsByName('res')[0]
+            res.value = Number(vals.val1) * Number(vals.val2)
+        }
+        function divi() {
+            document.getElementById('op').innerHTML='/'
+            let vals = getVals()
+            let res = document.getElementsByName('res')[0]
+            res.value = Number(vals.val1) / Number(vals.val2)
+
+        }
+
+function getVals() {
+          return {
+            val1: document.getElementsByName('val1')[0].value,
+            val2: document.getElementsByName('val2')[0].value
+}
+}
+
+
+        </script>
+</body>
+</html>
+
+
+

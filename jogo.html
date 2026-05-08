@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="estilo.css" rel="stylesheet" />
+    <title>Jogo</title>
+</head>
+
+<body>
+    <div>
+        <h2>Jogo da Adivinha</h2>
+        <input type="number" id="resposta" min="0" max="100" onchange="verificar()" />
+        <button onclick="verificar()">OK</button> 
+        <button onclick="window.location.reload()">Reset</button>
+        <div>
+            <img src="imagem 2.png" id="bigger" style="display: none;" />
+            <img src="imagem 3.png" id="equal" style="display: none;" />
+            <img src="imagem.png" id="smaller" style="display: none;" />
+        </div>
+        <script>
+            let bigger = document.getElementById('bigger')
+            let equal = document.getElementById('equal')
+            let smaller = document.getElementById('smaller')
+            let numero = Math.round(Math.random() * 100);
+            console.log(numero)
+            let resposta = document.getElementById('resposta')
+            let audio = new Audio ('rickroll.mp3')
+            audio.loop = true
+
+            function verificar() {
+                if (resposta.value == numero) { 
+                    equal.style.display = "block"
+                    bigger.style.display = "none"
+                    smaller.style.display = "none"
+                    console.log("equal")
+                    audio.play()
+
+                } else if (resposta.value < numero) {
+                    equal.style.display = "none"    
+                    bigger.style.display = "block"
+                    smaller.style.display = "none"
+                    console.log("smaller")
+                    audio.pause()
+
+                } else if (resposta.value > numero) {
+                    equal.style.display = "none"
+                    bigger.style.display = "none"
+                    smaller.style.display = "block"
+                    console.log("bigger")
+                    audio.pause()
+                }
+            }
+        </script>
+<a href="index.html">Home</a>
+</body>
+</html>

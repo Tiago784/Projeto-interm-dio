@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="estilo.css" rel="stylesheet" />
+    <title>Jogo</title>
+</head>
+
+<body>
+        <h2>Jogo da Sorte</h2>
+        <button onclick="tryluck()">Testa a tua sorte</button> 
+        <button onclick="stop()">Parar</button> 
+        <p>
+         <span id="n1" class="bignumber"></span>
+         <span id="n2" class="bignumber"></span>
+          <span id="n3" class="bignumber"></span>
+        </p>
+        <p id="msg"></p>
+    <script>
+        const dn1 = document.getElementById('n1')
+        const dn2 = document.getElementById('n2')    
+        const dn3 = document.getElementById('n3')  
+        let myTimer
+        let timeout = 0
+        let n1
+        let n2
+        let n3
+        
+        function tryluck() {
+         n1 =  Math.round(Math.random() * 9)
+         n2 =  Math.round(Math.random() * 9)
+         n3 =  Math.round(Math.random() * 9)
+        dn1.innerHTML = n1
+        dn2.innerHTML = n2
+        dn3.innerHTML = n3
+        timeout = timeout + 25
+        if ( timeout < 200) {
+            myTimer = setTimeout(tryluck, timeout)
+        }   else {
+            stop()
+        }
+    }
+    function stop() {
+        clearTimeout(myTimer)
+        timeout = 0
+        if (n1 == n2 && n2 == n3) {            
+          msg.innerHTML = "GANHASTE"
+          } else {
+            msg.innerHTML = "PERDESTE"
+          } 
+    }
+     </script>
+     <style>
+        .bignumber {
+            font-family: 'digital-clock-font' sans-serif;
+            font-size: xx-large;
+            letter-spacing: lem;
+        }
+        @font-face{
+font-family:'digital-clock-font';
+src: url('digital.7mono.ttf');
+        }
+     </style> 
+<a href="index.html">Home</a>
+</body>
+</html>
