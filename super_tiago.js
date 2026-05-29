@@ -6,7 +6,9 @@ const cenarios_fundos = [
     "imagens/super_tiago/cenario02_fundo.png",
     "imagens/super_tiago/cenario03_fundo.png"
 ]
-
+const personagens = [
+    "pinguim.png"
+]
 function loadScene(id) {
     const cenario01_fundo = new Image()
     cenario01_fundo.src = cenarios_fundos[id];
@@ -27,4 +29,10 @@ addEventListener("keyup", (ev) => {
         loadScene(sceneId)
     } 
 })
-
+function loadCharacter(id) {
+    const pinguim = new Image()
+    pinguim.src = cenarios_fundos[id];
+    pinguim.onload = () => {
+        ctx.drawImage(pinguim, 0, 0)
+    }
+}
