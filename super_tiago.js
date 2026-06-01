@@ -27,4 +27,57 @@ addEventListener("keyup", (ev) => {
         loadScene(sceneId)
     } 
 })
+const mycanvas = document.getElementById("mycanvas");
+const ctx = mycanvas.getContext("2d");
 
+const cenarios_fundos = [
+    "imagens/super_tiago/cenario01_fundo.png",
+    "imagens/super_tiago/cenario02_fundo.png",
+    "imagens/super_tiago/cenario03_fundo.png"
+];
+
+const personagem = new Image();
+personagem.src = "imagens/super_tiago/tiago.png";
+
+let playerX = 100;
+let playerY = 250;
+
+function desenharCena(id) {
+    const fundo = new Image();
+
+    fundo.src = cenarios_fundos[id];
+
+    fundo.onload = () => {
+        ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
+
+        // fundo
+        ctx.drawImage(fundo, 0, 0);
+
+        // personagem
+        ctx.drawImage(personagem, playerX, playerY, 64, 64);
+    };
+}
+
+let sceneId = 0;
+desenharCena(sceneId);
+
+addEventListener("keydown", (ev) => {
+
+    if (ev.code === "ArrowRight") {
+        playerX += 10;
+    }
+
+    if (ev.code === "ArrowLeft") {
+        playerX -= 10;
+    }
+
+    if (ev.code === "ArrowUp") {
+        playerY -= 10;
+    }
+
+    if (ev.code === "ArrowDown") {
+        playerY += 10;
+    }
+
+    desenharCena(sceneId);
+});
