@@ -32,23 +32,6 @@ personagem.src = "imagens/super_tiago/tiago.png";
 
 let playerX = 100;
 let playerY = 250;
-
-function desenharCena(id) {
-    const fundo = new Image();
-
-    fundo.src = cenarios_fundos[id];
-
-    fundo.onload = () => {
-        ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
-
-        // fundo
-        ctx.drawImage(fundo, 0, 0);
-
-        // personagem
-        ctx.drawImage(personagem, playerX, playerY, 64, 64);
-    };
-}
-
 let sceneId = 0;
 desenharCena(sceneId);
 
