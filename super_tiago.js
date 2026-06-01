@@ -1,3 +1,13 @@
+function gameLoop() {
+    ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
+
+    ctx.drawImage(fundoAtual, 0, 0);
+    ctx.drawImage(personagem, playerX, playerY, 64, 64);
+
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
 
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
