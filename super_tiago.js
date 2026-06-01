@@ -27,31 +27,4 @@ addEventListener("keyup", (ev) => {
         loadScene(sceneId)
     } 
 })
-const personagem = new Image();
-personagem.src = "imagens/super_tiago/tiago.png";
 
-let playerX = 100;
-let playerY = 250;
-let sceneId = 0;
-desenharCena(sceneId);
-
-addEventListener("keydown", (ev) => {
-
-    if (ev.code === "ArrowRight") {
-        playerX += 10;
-    }
-
-    if (ev.code === "ArrowLeft") {
-        playerX -= 10;
-    }
-
-    if (ev.code === "ArrowUp") {
-        playerY -= 10;
-    }
-
-    if (ev.code === "ArrowDown") {
-        playerY += 10;
-    }
-
-    desenharCena(sceneId);
-});
