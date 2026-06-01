@@ -1,13 +1,3 @@
-function gameLoop() {
-    ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
-
-    ctx.drawImage(fundoAtual, 0, 0);
-    ctx.drawImage(personagem, playerX, playerY, 64, 64);
-
-    requestAnimationFrame(gameLoop);
-}
-
-gameLoop();
 
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
@@ -37,15 +27,6 @@ addEventListener("keyup", (ev) => {
         loadScene(sceneId)
     } 
 })
-const mycanvas = document.getElementById("mycanvas");
-const ctx = mycanvas.getContext("2d");
-
-const cenarios_fundos = [
-    "imagens/super_tiago/cenario01_fundo.png",
-    "imagens/super_tiago/cenario02_fundo.png",
-    "imagens/super_tiago/cenario03_fundo.png"
-];
-
 const personagem = new Image();
 personagem.src = "imagens/super_tiago/tiago.png";
 
