@@ -6,9 +6,9 @@ const cenarios_fundos = [
     "imagens/super_tiago/cenario02_fundo.png",
     "imagens/super_tiago/cenario03_fundo.png"
 ]
-const personagens = [
-    "pinguim.png"
-]
+const personagens = {
+    "pinguim": "imagens/super_tiago/pinguim.png"
+}
 function loadScene(id) {
     const cenario01_fundo = new Image()
     cenario01_fundo.src = cenarios_fundos[id];
@@ -29,10 +29,20 @@ addEventListener("keyup", (ev) => {
         loadScene(sceneId)
     } 
 })
-function loadCharacter(id) {
+
+function loadCharacter(x, y) {
     const pinguim = new Image()
-    pinguim.src = cenarios_fundos[id];
+    pinguim.src = personagens.pinguim
     pinguim.onload = () => {
-        ctx.drawImage(pinguim, 0, 0)
+        ctx.drawImage(pinguim, x, y)
     }
 }
+
+mycanvas.addEventListener("click", (ev) => {
+    const bound = mycanvas.getBoundingClientRect()
+    const x = ev.clientX - bound.left
+    const y = ev.clientY - bound.top
+    console.log(x + " x " + y)
+    loadScene(sceneId)
+    loadCharacter(x, y)
+})
