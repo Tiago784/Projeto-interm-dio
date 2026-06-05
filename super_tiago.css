@@ -4,6 +4,6 @@ sup {
 }
 canvas {
     border: solid 1px black;
-    display: block;
+    display: none;
     margin: auto;
 }
