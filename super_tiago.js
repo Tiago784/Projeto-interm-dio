@@ -41,7 +41,6 @@ addEventListener("keyup", (ev) => {
         loadScene(sceneId)
     } 
 })
-
 async function loadCharacter(x, y) {
     ctx.drawImage(personagens.pinguim.image, x, y)
 }
@@ -61,4 +60,5 @@ inicializar().then( () => {
     loadScene(sceneId)
 
 })
+
 
