@@ -2,10 +2,16 @@
 const loading = document.getElementById("loading")
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
-const cenarios_fundos = [
-    "imagens/super_tiago/cenario01_fundo.png",
-    "imagens/super_tiago/cenario02_fundo.png",
-    "imagens/super_tiago/cenario03_fundo.png"
+const cenarios = [
+    {
+        url: "imagens/super_tiago/cenario01_fundo.png",
+    },
+    {
+        url: "imagens/super_tiago/cenario02_fundo.png",
+    },
+    {
+        url: "imagens/super_tiago/cenario03_fundo.png"
+    }
 ]
 const personagens = {
     "pinguim": {
@@ -15,6 +21,16 @@ const personagens = {
 }
 
 async function inicializar() {
+    // carregar os fundos
+    cenarios[0].image = new Image()
+    cenarios[0].image.src = cenarios[0].url
+    await cenarios[0].image.decode()
+    cenarios[1].image = new Image()
+    cenarios[1].image.src = cenarios[1].url
+    await cenarios[1].image.decode()
+    cenarios[2].image = new Image()
+    cenarios[2].image.src = cenarios[2].url
+    await cenarios[2].image.decode()
     // carregar o pinguim
     personagens.pinguim.image = new Image()
     personagens.pinguim.image.src = personagens.pinguim.url
@@ -25,11 +41,7 @@ async function inicializar() {
 }
 
 async function loadScene(id) {
-    const cenario01_fundo = new Image()
-    cenario01_fundo.src = cenarios_fundos[id];
-    cenario01_fundo.onload = () => {
-        ctx.drawImage(cenario01_fundo, 0, 0)
-    }
+    ctx.drawImage(cenarios[id].image, 0, 0)
 }
 
 addEventListener("keyup", (ev) => {
@@ -42,6 +54,7 @@ addEventListener("keyup", (ev) => {
     } 
 })
 async function loadCharacter(x, y) {
+    ctx.drawImage(cenarios[sceneId].image, 0, 0)
     ctx.drawImage(personagens.pinguim.image, x, y)
 }
 
@@ -50,15 +63,13 @@ mycanvas.addEventListener("click", (ev) => {
     const x = ev.clientX - bound.left
     const y = ev.clientY - bound.top
     console.log(x + " x " + y)
-    loadScene(sceneId).then( () => {
-        loadCharacter(x, y)
-    })
+    loadCharacter(x, y)
 })
 
 let sceneId = 0
 inicializar().then( () => {
+    console.log("carregar fundo")
     loadScene(sceneId)
-
 })
 
 
