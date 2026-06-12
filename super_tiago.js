@@ -65,11 +65,12 @@ mycanvas.addEventListener("click", (ev) => {
     console.log(x + " x " + y)
     loadCharacter(x, y)
 })
-
 let sceneId = 0
 inicializar().then( () => {
     console.log("carregar fundo")
     loadScene(sceneId)
 })
+loadCharacter(pinguim.png) (
 
 
+)
