@@ -74,10 +74,9 @@ inicializar().then( () => {
     loadScene(sceneId)
 })
 
-x = 320
-    y = 240
 
-async function loadCharacter(x, y) {
+
+function loadCharacter(x, y) {
     x = 320
     y = 240
     ctx.drawImage(cenarios[sceneId].image, 0, 0)
