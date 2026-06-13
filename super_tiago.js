@@ -81,6 +81,6 @@ function loadCharacter(x, y) {
     y = 240
     ctx.drawImage(cenarios[sceneId].image, 0, 0)
     ctx.drawImage(personagens.pinguim.image, x, y)
-     console.log("x,y")
+    log("x,y")
 }
 
