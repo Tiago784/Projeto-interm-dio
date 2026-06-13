@@ -74,7 +74,8 @@ inicializar().then( () => {
     loadScene(sceneId)
 })
 
-
+x = 320
+    y = 240
 
 async function loadCharacter(x, y) {
     x = 320
