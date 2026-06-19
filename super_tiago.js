@@ -60,6 +60,9 @@ async function loadCharacter(x, y) {
     ctx.drawImage(personagens.pinguim.image, x, y)
 }
 
+
+
+
 mycanvas.addEventListener("click", (ev) => {
     const bound = mycanvas.getBoundingClientRect()
     const x = ev.clientX - bound.left
@@ -174,9 +177,15 @@ inicializar().then( () => {
     console.log("carregar fundo")
     loadScene(sceneId)
 })
+<<<<<<< HEAD
 loadCharacter(pinguim.png) (
 )
 
+=======
+
+
+
+>>>>>>> 94e242c86697d03741aa1fcfd0ec7c9e41f24f85
 function loadCharacter(x, y) {
     x = 320
     y = 240
@@ -184,3 +193,7 @@ function loadCharacter(x, y) {
     ctx.drawImage(personagens.pinguim.image, x, y)
     log("x,y")
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 94e242c86697d03741aa1fcfd0ec7c9e41f24f85
