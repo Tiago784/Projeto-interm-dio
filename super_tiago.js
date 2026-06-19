@@ -2,6 +2,8 @@
 const loading = document.getElementById("loading")
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
+const floor = 440
+const passos = 10
 const cenarios = [
     {
         url: "imagens/super_tiago/cenario01_fundo.png",
@@ -65,12 +67,120 @@ mycanvas.addEventListener("click", (ev) => {
     console.log(x + " x " + y)
     loadCharacter(x, y)
 })
+const scenes = {
+    cenario01_fundo: {
+        id: 'cenario01',
+        sprite: "cenario01_fundo.png",
+        image: null,
+        floor: 440,
+    },
+    cenario02_fundo: {
+        id: 'cenario02',
+        sprite: "cenario02_fundo.png",
+        image: null
+    }
+}
+const actors = {
+    pinguim: {
+        sprite: "/acarta/imagens/supermario.png",
+        image: null,
+        x: 300,
+        newx: 300,
+        updatePos: () => {
+            if (actors.pinguim.newx > actors.pinguim.x) {
+                const diff = actors.pinguim.newx - actors.pinguim.x
+                if (diff > passos) {
+                    actors.pinguim.x = actors.pinguim.x + passos
+                } else {
+                    actors.pinguim.x = actors.pinguim.x + diff
+                }
+            } else {
+                const diff = actors.pinguim.x - actors.pinguim.newx
+                if (diff > passos) {
+                    actors.pinguim.x = actors.pinguim.x - passos
+                } else {
+                    actors.pinguim.x = actors.pinguim.x - diff
+                }
+            }
+        }
+    }
+}
+
+
+async function loadSceneByKey(key) {
+    const scene = scenes[Object.keys(scenes)[sceneKey]]
+    await loadScene(scene) 
+}
+async function loadScene(scene) {
+    ctx.drawImage(scene.image, 0, 0)
+}
+
+async function actorToScene(actor) {
+    actorTo(actor, actor.scenePos)
+}
+async function actorTo(actor, x) {
+    // update actor current position
+    actor.x = x
+    // update scene
+    const y = floor - actors.pinguim.image.height
+    loadSceneByKey(sceneKey)
+    ctx.drawImage(actor.image, x, y)
+}
+
+async function actorMoveTo(actor, x) {
+    while (actor.x !== x) {
+        let newpos = -1 
+        if (actor.x > x) {
+            newpos = (actor.x - x) / 2 + x
+        } else {
+            newpos = actor, (x - actor.x) / 2 + actor.x
+        }
+        console.log(newpos)
+        await actorTo(actor, newpos)
+        await delay(500)
+    }
+}
+
+mycanvas.addEventListener("click", (ev) => {
+    const bound = mycanvas.getBoundingClientRect() 
+    const x = ev.clientX - bound.left
+    stage.actors[0].newx = x
+})
+
+/** renderiza o palco */
+function renderStage() {
+    // render cenário
+    ctx.drawImage(stage.scene.image, 0, 0)
+    // atualiza atores
+    stage.actors.forEach( actor => {
+        actor.updatePos()
+    })
+    // render atores
+    stage.actors.forEach( actor => {
+        ctx.drawImage(actor.image, actor.x, stage.scene.floor - actor.image.height)
+    })
+}
+
+function loop() {
+   console.log('loop: ' + Date.now()) 
+   // render stage
+   renderStage()
+   // update actors
+   setTimeout(loop, 40)
+}
+
 let sceneId = 0
 inicializar().then( () => {
     console.log("carregar fundo")
     loadScene(sceneId)
 })
 loadCharacter(pinguim.png) (
-
-
 )
+
+function loadCharacter(x, y) {
+    x = 320
+    y = 240
+    ctx.drawImage(cenarios[sceneId].image, 0, 0)
+    ctx.drawImage(personagens.pinguim.image, x, y)
+    log("x,y")
+}
