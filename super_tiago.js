@@ -30,12 +30,16 @@ async function loadScene(id) {
 
 addEventListener("keyup", (ev) => {
     if (ev.code === "ArrowRight") {
-        if (sceneId < 2) sceneId = sceneId + 1
+        if (sceneId < 2) {
+            sceneId = sceneId + 1
+        }
         loadScene(sceneId)
-    }else if (ev.code === "ArrowLeft") {
-        if (sceneId > 0) sceneId = sceneId - 1
+    } else if (ev.code === "ArrowLeft") {
+        if (sceneId > 0) {
+            sceneId = sceneId - 1
+        }
         loadScene(sceneId)
-    } 
+    }
 })
 async function loadCharacter(x, y) {
     ctx.drawImage(cenarios[sceneId].image, 0, 0)
