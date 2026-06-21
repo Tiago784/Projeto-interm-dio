@@ -21,37 +21,6 @@ const personagens = {
         "image": null
     }
 }
-
-
-
-async function loadScene(id) {
-    ctx.drawImage(cenarios[id].image, 0, 0)
-}
-
-addEventListener("keyup", (ev) => {
-    if (ev.code === "ArrowRight") {
-        if (sceneId < 2) sceneId = sceneId + 1
-        loadScene(sceneId)
-    }else if (ev.code === "ArrowLeft") {
-        if (sceneId > 0) sceneId = sceneId - 1
-        loadScene(sceneId)
-    } 
-})
-async function loadCharacter(x, y) {
-    ctx.drawImage(cenarios[sceneId].image, 0, 0)
-    ctx.drawImage(personagens.pinguim.image, x, y)
-}
-
-
-
-
-mycanvas.addEventListener("click", (ev) => {
-    const bound = mycanvas.getBoundingClientRect()
-    const x = ev.clientX - bound.left
-    const y = ev.clientY - bound.top
-    console.log(x + " x " + y)
-    loadCharacter(x, y)
-})
 const scenes = {
     cenario01_fundo: {
         id: 'cenario01',
@@ -90,6 +59,37 @@ const actors = {
         }
     }
 }
+
+
+
+async function loadScene(id) {
+    ctx.drawImage(cenarios[id].image, 0, 0)
+}
+
+addEventListener("keyup", (ev) => {
+    if (ev.code === "ArrowRight") {
+        if (sceneId < 2) sceneId = sceneId + 1
+        loadScene(sceneId)
+    }else if (ev.code === "ArrowLeft") {
+        if (sceneId > 0) sceneId = sceneId - 1
+        loadScene(sceneId)
+    } 
+})
+async function loadCharacter(x, y) {
+    ctx.drawImage(cenarios[sceneId].image, 0, 0)
+    ctx.drawImage(personagens.pinguim.image, x, y)
+}
+
+
+
+
+mycanvas.addEventListener("click", (ev) => {
+    const bound = mycanvas.getBoundingClientRect()
+    const x = ev.clientX - bound.left
+    const y = ev.clientY - bound.top
+    console.log(x + " x " + y)
+    loadCharacter(x, y)
+})
 
 
 async function loadSceneByKey(key) {
@@ -135,6 +135,7 @@ mycanvas.addEventListener("click", (ev) => {
 /** renderiza o palco */
 function renderStage() {
     // render cenário
+    ctx.drawImage(stage.scene.image, 0, 0)
     // atualiza atores
     stage.actors.forEach( actor => {
         actor.updatePos()
