@@ -67,7 +67,7 @@ const scenes = {
 }
 const actors = {
     pinguim: {
-        sprite: "/acarta/imagens/supermario.png",
+        sprite: "//imagens/super_tiago/pinguim.png",
         image: null,
         x: 300,
         newx: 300,
@@ -135,7 +135,6 @@ mycanvas.addEventListener("click", (ev) => {
 /** renderiza o palco */
 function renderStage() {
     // render cenário
-    ctx.drawImage(stage.scene.image, 0, 0)
     // atualiza atores
     stage.actors.forEach( actor => {
         actor.updatePos()
