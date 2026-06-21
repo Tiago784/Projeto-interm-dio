@@ -120,7 +120,7 @@ async function actorToScene(actor) {
 }
 
 async function actorTo(actor, x) {
-  // update actor current position
+  // update actor current positions
   actor.x = x
 
   // update scenes
