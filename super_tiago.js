@@ -22,25 +22,7 @@ const personagens = {
     }
 }
 
-async function inicializar() {
-    // carregar os fundos
-    cenarios[0].image = new Image()
-    cenarios[0].image.src = cenarios[0].url
-    await cenarios[0].image.decode()
-    cenarios[1].image = new Image()
-    cenarios[1].image.src = cenarios[1].url
-    await cenarios[1].image.decode()
-    cenarios[2].image = new Image()
-    cenarios[2].image.src = cenarios[2].url
-    await cenarios[2].image.decode()
-    // carregar o pinguim
-    personagens.pinguim.image = new Image()
-    personagens.pinguim.image.src = personagens.pinguim.url
-    personagens.pinguim.image.onload = () => {
-        loading.style.display = "none"
-        mycanvas.style.display = "block"
-    }
-}
+
 
 async function loadScene(id) {
     ctx.drawImage(cenarios[id].image, 0, 0)
@@ -177,15 +159,15 @@ inicializar().then( () => {
     console.log("carregar fundo")
     loadScene(sceneId)
 })
-<<<<<<< HEAD
+
 loadCharacter(pinguim.png) (
 )
 
-=======
 
 
 
->>>>>>> 94e242c86697d03741aa1fcfd0ec7c9e41f24f85
+
+
 function loadCharacter(x, y) {
     x = 320
     y = 240
@@ -193,7 +175,5 @@ function loadCharacter(x, y) {
     ctx.drawImage(personagens.pinguim.image, x, y)
     log("x,y")
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 94e242c86697d03741aa1fcfd0ec7c9e41f24f85
+
