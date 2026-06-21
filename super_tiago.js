@@ -154,8 +154,9 @@ function loop() {
    setTimeout(loop, 40)
 }
 
-let sceneId = 0
-inicializar().then( () => {
-    console.log("carregar fundo")
-    loadScene(sceneId)
-})
+function inicializar() {
+    return new Promise((resolve) => {
+        console.log("iniciando")
+        resolve()
+    })
+}
