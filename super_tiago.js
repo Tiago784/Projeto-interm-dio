@@ -132,5 +132,5 @@ mycanvas.addEventListener("click", (ev) => {
 
     personagens.pinguim.newx = x
 })
-
+//a//
 inicializar()
