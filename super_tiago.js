@@ -1,166 +1,136 @@
-
 const loading = document.getElementById("loading")
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
+
 const floor = 440
 const passos = 10
+
+let sceneId = 0
+
 const cenarios = [
     {
         url: "imagens/super_tiago/cenario01_fundo.png",
+        image: null
     },
     {
         url: "imagens/super_tiago/cenario02_fundo.png",
+        image: null
     },
     {
-        url: "imagens/super_tiago/cenario03_fundo.png"
-    }
-]
-const personagens = {
-    "pinguim": {
-        "url": "imagens/super_tiago/pinguim.png",
-        "image": null
-    }
-}
-
-
-
-async function loadScene(id) {
-    ctx.drawImage(cenarios[id].image, 0, 0)
-}
-
-addEventListener("keyup", (ev) => {
-    if (ev.code === "ArrowRight") {
-        if (sceneId < 2) {
-            sceneId = sceneId + 1
-        }
-        loadScene(sceneId)
-    } else if (ev.code === "ArrowLeft") {
-        if (sceneId > 0) {
-            sceneId = sceneId - 1
-        }
-        loadScene(sceneId)
-    }
-})
-async function loadCharacter(x, y) {
-    ctx.drawImage(cenarios[sceneId].image, 0, 0)
-    ctx.drawImage(personagens.pinguim.image, x, y)
-}
-
-
-
-
-mycanvas.addEventListener("click", (ev) => {
-    const bound = mycanvas.getBoundingClientRect()
-    const x = ev.clientX - bound.left
-    const y = ev.clientY - bound.top
-    console.log(x + " x " + y)
-    loadCharacter(x, y)
-})
-const scenes = {
-    cenario01_fundo: {
-        id: 'cenario01',
-        sprite: "cenario01_fundo.png",
-        image: null,
-        floor: 440,
-    },
-    cenario02_fundo: {
-        id: 'cenario02',
-        sprite: "cenario02_fundo.png",
+        url: "imagens/super_tiago/cenario03_fundo.png",
         image: null
     }
-}
-const actors = {
+]
+
+const personagens = {
     pinguim: {
-        sprite: "/acarta/imagens/supermario.png",
+        url: "imagens/super_tiago/pinguim.png",
         image: null,
         x: 300,
-        newx: 300,
-        updatePos: () => {
-            if (actors.pinguim.newx > actors.pinguim.x) {
-                const diff = actors.pinguim.newx - actors.pinguim.x
-                if (diff > passos) {
-                    actors.pinguim.x = actors.pinguim.x + passos
-                } else {
-                    actors.pinguim.x = actors.pinguim.x + diff
-                }
-            } else {
-                const diff = actors.pinguim.x - actors.pinguim.newx
-                if (diff > passos) {
-                    actors.pinguim.x = actors.pinguim.x - passos
-                } else {
-                    actors.pinguim.x = actors.pinguim.x - diff
-                }
-            }
-        }
+        newx: 300
     }
 }
 
+function loadImage(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image()
 
-async function loadSceneByKey(key) {
-    const scene = scenes[Object.keys(scenes)[sceneKey]]
-    await loadScene(scene) 
-}
-async function loadScene(scene) {
-    ctx.drawImage(scene.image, 0, 0)
-}
+        img.onload = () => resolve(img)
+        img.onerror = reject
 
-async function actorToScene(actor) {
-    actorTo(actor, actor.scenePos)
-}
-async function actorTo(actor, x) {
-    // update actor current position
-    actor.x = x
-    // update scene
-    const y = floor - actors.pinguim.image.height
-    loadSceneByKey(sceneKey)
-    ctx.drawImage(actor.image, x, y)
+        img.src = url
+    })
 }
 
-async function actorMoveTo(actor, x) {
-    while (actor.x !== x) {
-        let newpos = -1 
-        if (actor.x > x) {
-            newpos = (actor.x - x) / 2 + x
-        } else {
-            newpos = actor, (x - actor.x) / 2 + actor.x
-        }
-        console.log(newpos)
-        await actorTo(actor, newpos)
-        await delay(500)
+async function inicializar() {
+
+    for (const cenario of cenarios) {
+        cenario.image = await loadImage(cenario.url)
     }
+
+    personagens.pinguim.image =
+        await loadImage(personagens.pinguim.url)
+
+    loading.style.display = "none"
+
+    renderScene()
+    loop()
 }
 
-mycanvas.addEventListener("click", (ev) => {
-    const bound = mycanvas.getBoundingClientRect() 
-    const x = ev.clientX - bound.left
-    stage.actors[0].newx = x
-})
+function renderScene() {
 
-/** renderiza o palco */
-function renderStage() {
-    // render cenário
-    ctx.drawImage(stage.scene.image, 0, 0)
-    // atualiza atores
-    stage.actors.forEach( actor => {
-        actor.updatePos()
-    })
-    // render atores
-    stage.actors.forEach( actor => {
-        ctx.drawImage(actor.image, actor.x, stage.scene.floor - actor.image.height)
-    })
+    ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
+
+    ctx.drawImage(
+        cenarios[sceneId].image,
+        0,
+        0
+    )
+
+    const pinguim = personagens.pinguim
+
+    ctx.drawImage(
+        pinguim.image,
+        pinguim.x,
+        floor - pinguim.image.height
+    )
+}
+
+function updateActors() {
+
+    const pinguim = personagens.pinguim
+
+    if (pinguim.newx > pinguim.x) {
+
+        const diff = pinguim.newx - pinguim.x
+
+        pinguim.x += Math.min(diff, passos)
+
+    } else if (pinguim.newx < pinguim.x) {
+
+        const diff = pinguim.x - pinguim.newx
+
+        pinguim.x -= Math.min(diff, passos)
+    }
 }
 
 function loop() {
-   console.log('loop: ' + Date.now()) 
-   // render stage
-   renderStage()
-   // update actors
-   setTimeout(loop, 40)
+
+    updateActors()
+
+    renderScene()
+
+    requestAnimationFrame(loop)
 }
 
-function inicializar() {
-    return new Promise((resolve) => {
-        console.log("iniciando")
-        resolve()
-    })
-}
+addEventListener("keyup", (ev) => {
+
+    if (ev.code === "ArrowRight") {
+
+        if (sceneId < cenarios.length - 1) {
+            sceneId++
+        }
+
+        renderScene()
+    }
+
+    if (ev.code === "ArrowLeft") {
+
+        if (sceneId > 0) {
+            sceneId--
+        }
+
+        renderScene()
+    }
+})
+
+mycanvas.addEventListener("click", (ev) => {
+
+    const bound = mycanvas.getBoundingClientRect()
+
+    const x = ev.clientX - bound.left
+
+    personagens.pinguim.newx = x
+})
+
+inicializar()
