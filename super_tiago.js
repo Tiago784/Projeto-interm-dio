@@ -22,7 +22,25 @@ const personagens = {
     }
 }
 
-
+async function inicializar() {
+    // carregar os fundos
+    cenarios[0].image = new Image()
+    cenarios[0].image.src = cenarios[0].url
+    await cenarios[0].image.decode()
+    cenarios[1].image = new Image()
+    cenarios[1].image.src = cenarios[1].url
+    await cenarios[1].image.decode()
+    cenarios[2].image = new Image()
+    cenarios[2].image.src = cenarios[2].url
+    await cenarios[2].image.decode()
+    // carregar o pinguim
+    personagens.pinguim.image = new Image()
+    personagens.pinguim.image.src = personagens.pinguim.url
+    personagens.pinguim.image.onload = () => {
+        loading.style.display = "none"
+        mycanvas.style.display = "block"
+    }
+}
 
 async function loadScene(id) {
     ctx.drawImage(cenarios[id].image, 0, 0)
@@ -42,9 +60,6 @@ async function loadCharacter(x, y) {
     ctx.drawImage(personagens.pinguim.image, x, y)
 }
 
-
-
-
 mycanvas.addEventListener("click", (ev) => {
     const bound = mycanvas.getBoundingClientRect()
     const x = ev.clientX - bound.left
@@ -52,19 +67,7 @@ mycanvas.addEventListener("click", (ev) => {
     console.log(x + " x " + y)
     loadCharacter(x, y)
 })
-const scenes = {
-    cenario01_fundo: {
-        id: 'cenario01',
-        sprite: "cenario01_fundo.png",
-        image: null,
-        floor: 440,
-    },
-    cenario02_fundo: {
-        id: 'cenario02',
-        sprite: "cenario02_fundo.png",
-        image: null
-    }
-}
+
 const actors = {
     pinguim: {
         sprite: "/acarta/imagens/supermario.png",
