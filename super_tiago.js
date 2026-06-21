@@ -123,7 +123,7 @@ async function actorTo(actor, x) {
   // update actor current position
   actor.x = x
 
-  // update scene
+  // update scenes
   const y = floor - actors.pinguim.image.height
   loadSceneByKey(sceneKey)
   ctx.drawImage(actor.image, x, y)
