@@ -21,44 +21,6 @@ const personagens = {
         "image": null
     }
 }
-const scenes = {
-    cenario01_fundo: {
-        id: 'cenario01',
-        sprite: "cenario01_fundo.png",
-        image: null,
-        floor: 440,
-    },
-    cenario02_fundo: {
-        id: 'cenario02',
-        sprite: "cenario02_fundo.png",
-        image: null
-    }
-}
-const actors = {
-    pinguim: {
-        sprite: "//imagens/super_tiago/pinguim.png",
-        image: null,
-        x: 300,
-        newx: 300,
-        updatePos: () => {
-            if (actors.pinguim.newx > actors.pinguim.x) {
-                const diff = actors.pinguim.newx - actors.pinguim.x
-                if (diff > passos) {
-                    actors.pinguim.x = actors.pinguim.x + passos
-                } else {
-                    actors.pinguim.x = actors.pinguim.x + diff
-                }
-            } else {
-                const diff = actors.pinguim.x - actors.pinguim.newx
-                if (diff > passos) {
-                    actors.pinguim.x = actors.pinguim.x - passos
-                } else {
-                    actors.pinguim.x = actors.pinguim.x - diff
-                }
-            }
-        }
-    }
-}
 
 
 
@@ -90,6 +52,44 @@ mycanvas.addEventListener("click", (ev) => {
     console.log(x + " x " + y)
     loadCharacter(x, y)
 })
+const scenes = {
+    cenario01_fundo: {
+        id: 'cenario01',
+        sprite: "cenario01_fundo.png",
+        image: null,
+        floor: 440,
+    },
+    cenario02_fundo: {
+        id: 'cenario02',
+        sprite: "cenario02_fundo.png",
+        image: null
+    }
+}
+const actors = {
+    pinguim: {
+        sprite: "/acarta/imagens/supermario.png",
+        image: null,
+        x: 300,
+        newx: 300,
+        updatePos: () => {
+            if (actors.pinguim.newx > actors.pinguim.x) {
+                const diff = actors.pinguim.newx - actors.pinguim.x
+                if (diff > passos) {
+                    actors.pinguim.x = actors.pinguim.x + passos
+                } else {
+                    actors.pinguim.x = actors.pinguim.x + diff
+                }
+            } else {
+                const diff = actors.pinguim.x - actors.pinguim.newx
+                if (diff > passos) {
+                    actors.pinguim.x = actors.pinguim.x - passos
+                } else {
+                    actors.pinguim.x = actors.pinguim.x - diff
+                }
+            }
+        }
+    }
+}
 
 
 async function loadSceneByKey(key) {
