@@ -66,23 +66,10 @@ mycanvas.addEventListener("click", (ev) => {
   loadCharacter(x, y)
 })
 
-const scenes = {
-  cenario01_fundo: {
-    id: 'cenario01',
-    sprite: "cenario01_fundo.png",
-    image: null,
-    floor: 440,
-  },
-  cenario02_fundo: {
-    id: 'cenario02',
-    sprite: "cenario02_fundo.png",
-    image: null
-  }
-}
 
 const actors = {
   pinguim: {
-    sprite: "/acarta/imagens/supermario.png",
+    sprite: "imagens/super_tiago/cenario01_fundo.png",
     image: null,
     x: 300,
     newx: 300,
@@ -120,10 +107,10 @@ async function actorToScene(actor) {
 }
 
 async function actorTo(actor, x) {
-  // update actor current positions
+  // update actor current positions //
   actor.x = x
 
-  // update scenes
+  // update scenes //
   const y = floor - actors.pinguim.image.height
   loadSceneByKey(sceneKey)
   ctx.drawImage(actor.image, x, y)
@@ -154,12 +141,12 @@ function renderStage() {
   // render cenário
   ctx.drawImage(stage.scene.image, 0, 0)
 
-  // atualiza atores
+  // atualiza atores //
   stage.actors.forEach(actor => {
     actor.updatePos()
   })
 
-  // render atores
+  // render atores //
   stage.actors.forEach(actor => {
     ctx.drawImage(actor.image, actor.x, stage.scene.floor - actor.image.height)
   })
@@ -168,10 +155,10 @@ function renderStage() {
 function loop() {
   console.log('loop: ' + Date.now())
 
-  // render stage
+  // render stage //
   renderStage()
 
-  // update actors
+  // update actors //
   setTimeout(loop, 40)
 }
 
