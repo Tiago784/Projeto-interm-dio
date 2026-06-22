@@ -167,3 +167,4 @@ function inicializar() {
     console.log("iniciando")
     resolve()
   })
+  }
