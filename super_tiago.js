@@ -3,7 +3,22 @@ const ctx = mycanvas.getContext("2d")
 
 const floor = 440
 const passos = 10
+const mycanvas = document.getElementById("mycanvas");
 
+if (!mycanvas) {
+    alert("Canvas não encontrado!");
+} else {
+    const ctx = mycanvas.getContext("2d");
+
+    // fundo
+    ctx.fillRect(0, 0, 640, 480);
+
+    // texto
+    ctx.font = "30px Arial";
+    ctx.fillText("Canvas funciona!", 180, 240);
+
+    console.log("Canvas carregado com sucesso");
+}
 let sceneId = 0
 
 const cenarios = [
