@@ -7,13 +7,12 @@ const forcaSalto = -15
 
 let sceneId = 0
 
-// ── Cenários ────────────────────────────────────────────
+
 const cenarios = [new Image(), new Image()]
 cenarios[0].src = "imagens/super_tiago/cenario01_fundo.png"
 cenarios[1].src = "imagens/super_tiago/cenario02_fundo.png"
 
-// ── Sprites ─────────────────────────────────────────────
-const idleImg = new Image()
+
 idleImg.src = "imagens/super_tiago/seylah_idle.png"
 idleImg.onerror = () => console.error("ERRO: seylah_idle.png nao carregou")
 
@@ -24,7 +23,7 @@ for (let i = 1; i <= 5; i++) {
     runFrames.push(img)
 }
 
-// ── Personagem ───────────────────────────────────────────
+
 const pinguim = {
     x: 0,
     y: 0,
@@ -33,23 +32,22 @@ const pinguim = {
     direcao: 1
 }
 
-// ── Plataformas por cenário ──────────────────────────────
-// Cenário 1: chão preto começa em Y=399, poço entre X=430 e X=460
+
+
 const plataformasCenario1 = [
     { xInicio:   0, xFim: 430, y: 399 },
     { xInicio: 460, xFim: 640, y: 399 },
 ]
 
-// Cenário 2: plataformas medidas com precisão das imagens
-const plataformasCenario2 = [
-    { xInicio:  35, xFim: 160, y: 312 },  // caixa esquerda (topo)
-    { xInicio: 160, xFim: 280, y: 182 },  // degrau esquerdo
-    { xInicio: 280, xFim: 422, y: 222 },  // plataforma central baixa
-    { xInicio: 422, xFim: 632, y: 182 },  // plataforma central alta
-    { xInicio: 490, xFim: 632, y: 260 },  // plataforma direita baixa
-]
 
-// ── Poços ────────────────────────────────────────────────
+const plataformasCenario2 = [
+    { xInicio:  35, xFim: 160, y: 312 }, 
+    { xInicio: 160, xFim: 280, y: 182 }, 
+    { xInicio: 280, xFim: 422, y: 222 },  
+    { xInicio: 422, xFim: 632, y: 182 },  
+    { xInicio: 490, xFim: 632, y: 260 },  
+
+
 const pocos = [
     { xInicio: 430, xFim: 460, destinoCenario: 1 },
 ]
@@ -58,10 +56,9 @@ function plataformasAtuais() {
     return sceneId === 0 ? plataformasCenario1 : plataformasCenario2
 }
 
-// ── Posições de início por cenário ───────────────────────
 const iniciosPorCenario = [
-    { x: 300, y: 200 },   // cenário 1 - cai para o chão
-    { x: 340, y: 50  },   // cenário 2 - junto à corda, cai para plataforma central
+    { x: 300, y: 200 },   
+    { x: 340, y: 50  },   
 ]
 
 function posicionarNoInicio() {
@@ -72,7 +69,7 @@ function posicionarNoInicio() {
     pinguim.velocidadeY = 0
 }
 
-// ── Chão ─────────────────────────────────────────────────
+
 function obterChao(x) {
     let melhorY = -1
     for (let p of plataformasAtuais()) {
@@ -83,7 +80,7 @@ function obterChao(x) {
     return melhorY === -1 ? mycanvas.height : melhorY
 }
 
-// ── Animação ─────────────────────────────────────────────
+
 let frameAtual = 0
 let contadorAnimacao = 0
 
@@ -93,7 +90,7 @@ function spriteOk(img) {
     return img && img.complete && img.naturalWidth > 0
 }
 
-// ── Desenhar ─────────────────────────────────────────────
+
 function desenhar() {
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
 
@@ -126,7 +123,7 @@ function desenhar() {
     }
     ctx.restore()
 
-    // Dica do poço
+    
     const larguraSprite = spriteOk(idleImg) ? idleImg.width : 48
     const centroX = pinguim.x + larguraSprite / 2
     const poco = pocos.find(p => sceneId < p.destinoCenario && centroX >= p.xInicio && centroX <= p.xFim)
@@ -138,7 +135,7 @@ function desenhar() {
     }
 }
 
-// ── Atualizar ─────────────────────────────────────────────
+
 function atualizar() {
     if (teclas.a) { pinguim.x -= passos; pinguim.direcao = -1 }
     if (teclas.d) { pinguim.x += passos; pinguim.direcao =  1 }
@@ -173,7 +170,7 @@ function atualizar() {
         contadorAnimacao = 0
     }
 
-    // ── Detetar poço + tecla S ───────────────────────────
+ 
     const centroX = pinguim.x + larguraSprite / 2
     const poco = pocos.find(p => sceneId < p.destinoCenario && centroX >= p.xInicio && centroX <= p.xFim)
     if (poco && teclas.s && pinguim.noChao) {
@@ -186,14 +183,14 @@ function atualizar() {
     }
 }
 
-// ── Loop principal ────────────────────────────────────────
+
 function loop() {
     atualizar()
     desenhar()
     requestAnimationFrame(loop)
 }
 
-// ── Controlos ─────────────────────────────────────────────
+
 window.addEventListener("keydown", function(ev) {
     if (ev.code === "KeyA") teclas.a = true
     if (ev.code === "KeyD") teclas.d = true
@@ -210,7 +207,7 @@ window.addEventListener("keyup", function(ev) {
     if (ev.code === "KeyS") teclas.s = false
 })
 
-// ── Início ────────────────────────────────────────────────
+
 window.onload = function() {
     posicionarNoInicio()
     loop()
