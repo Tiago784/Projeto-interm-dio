@@ -35,54 +35,37 @@ const pinguim = {
 }
 
 // ── Plataformas por cenário ──────────────────────────────
-// Cenário 1 (interior, 640x480)
-// Corda ao centro ~x=265-295, chão principal ~y=210
-// Degraus na caixa esquerda, corredor do meio, sala direita
 const plataformasCenario1 = [
-    // Chão principal esquerdo (antes da caixa)
     { xInicio:   0, xFim: 165, y: 210 },
-
-    // Degraus dentro da caixa esquerda (visíveis na imagem)
     { xInicio:  40, xFim: 155, y: 305 },
     { xInicio:  40, xFim: 155, y: 285 },
     { xInicio:  40, xFim: 155, y: 265 },
     { xInicio:  40, xFim: 155, y: 245 },
     { xInicio:  40, xFim: 155, y: 225 },
-
-    // Chão do corredor do meio
     { xInicio: 165, xFim: 265, y: 210 },
-
-    // Após a corda (lado direito)
     { xInicio: 295, xFim: 500, y: 210 },
-
-    // Abertura/sala direita (nível mais baixo)
     { xInicio: 500, xFim: 530, y: 250 },
     { xInicio: 530, xFim: 640, y: 210 },
 ]
 
-// Cenário 2 (exterior noite, 640x480)
-// Chão geral ~y=390, abertura na zona da corda ~x=430-470
 const plataformasCenario2 = [
-    // Chão contínuo à esquerda (inclui zona da casa)
     { xInicio:   0, xFim: 420, y: 390 },
-
-    // Após a abertura da corda
     { xInicio: 470, xFim: 640, y: 390 },
 ]
 
-// Poços por cenário: zona onde premir S muda de cenário
+// ── Poços ────────────────────────────────────────────────
 const pocos = [
-    { xInicio: 265, xFim: 295, destinoCenario: 1 },  // Cenário 1 → 2
+    { xInicio: 265, xFim: 295, destinoCenario: 1 },
 ]
 
 function plataformasAtuais() {
     return sceneId === 0 ? plataformasCenario1 : plataformasCenario2
 }
 
-// Posições de início por cenário (em cima da corda)
+// ── Posições de início por cenário ───────────────────────
 const iniciosPorCenario = [
-    { x: 265, y: 150 },   // Cenário 1: ao lado da corda
-    { x: 420, y: 320 },   // Cenário 2: ao lado da corda exterior
+    { x: 265, y: 210 },
+    { x: 380, y: 390 },
 ]
 
 function posicionarNoInicio() {
@@ -94,7 +77,7 @@ function posicionarNoInicio() {
     pinguim.velocidadeY = 0
 }
 
-// Devolve o y do chão para uma dada posição x
+// ── Chão ─────────────────────────────────────────────────
 function obterChao(x) {
     let melhorY = 999
     for (let p of plataformasAtuais()) {
