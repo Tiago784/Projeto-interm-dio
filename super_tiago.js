@@ -1,227 +1,185 @@
-const run1 = new Image()
-run1.src = "imagens/super_tiago/run1.png"
-
-run1.onload = () => console.log("RUN1 OK")
-run1.onerror = () => console.log("RUN1 ERRO")
-
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
 
 const floor = 399
-const passos = 1
-
+const passos = 3
 const gravidade = 0.6
 const forcaSalto = -15
 
 let sceneId = 0
 
-const cenarios = [
-    new Image(),
-    new Image(),
-    new Image()
-]
-
+const cenarios = [new Image(), new Image(), new Image()]
 cenarios[0].src = "imagens/super_tiago/cenario01_fundo.png"
 cenarios[1].src = "imagens/super_tiago/cenario02_fundo.png"
 cenarios[2].src = "imagens/super_tiago/cenario03_fundo.png"
 
-const pinguim = {
-    image: new Image(),
-    x: 300,
-    y: 0,
-    velocidadeY: 0,
-    noChao: false,
-    direcao: 1
-}
+// ── Idle ────────────────────────────────────────────────
+const idleImg = new Image()
+idleImg.src = "imagens/super_tiago/seylah_idle.png"
+idleImg.onload  = () => console.log("✅ idle carregou", idleImg.width, idleImg.height)
+idleImg.onerror = () => console.error("❌ idle NÃO carregou – verifica o caminho!")
 
-pinguim.image.src = "imagens/super_tiago/seylah_idle.png"
-
-// Frames de corrida (run1.png até run5.png)
+// ── Run frames ──────────────────────────────────────────
 const runFrames = []
 for (let i = 1; i <= 5; i++) {
     const img = new Image()
     img.src = `imagens/super_tiago/run${i}.png`
+    img.onload  = () => console.log(`✅ run${i} carregou`)
+    img.onerror = () => console.error(`❌ run${i} NÃO carregou – verifica o caminho!`)
     runFrames.push(img)
 }
 
-// Frames de pulo — se não tiver sprites separados,
-// reutiliza os frames de corrida automaticamente
-const jumpFrames = []
-for (let i = 1; i <= 5; i++) {
-    const img = new Image()
-    img.src = `imagens/super_tiago/jump${i}.png`
-    img.onerror = () => {
-        // Se não carregar, marca como inválido
-        img.dataset.falhou = "true"
-    }
-    jumpFrames.push(img)
+// ── Personagem ──────────────────────────────────────────
+const pinguim = {
+    x: 300,
+    y: 0,
+    velocidadeY: 0,
+    noChao: false,
+    direcao: 1   // 1 = direita, -1 = esquerda
 }
 
 let frameAtual = 0
 let contadorAnimacao = 0
 
-const teclas = {
-    a: false,
-    d: false
-}
+const teclas = { a: false, d: false }
 
-const poco = {
-    x: 420,
-    largura: 50
-}
-
-const portaSubterranea = {
-    x: 540,
-    largura: 60
-}
-
-pinguim.image.onload = () => {
-    pinguim.y = floor - pinguim.image.height
+// Quando o idle carregar, posiciona o personagem no chão
+idleImg.onload = () => {
+    console.log("✅ idle carregou", idleImg.width, idleImg.height)
+    pinguim.y = floor - idleImg.height
     pinguim.noChao = true
 }
 
+// ── Helpers ─────────────────────────────────────────────
+function spriteCarregado(img) {
+    return img && img.complete && img.naturalWidth > 0
+}
+
+// ── Desenhar ─────────────────────────────────────────────
 function desenhar() {
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
 
-    if (cenarios[sceneId].complete) {
+    // Fundo
+    if (spriteCarregado(cenarios[sceneId])) {
         ctx.drawImage(cenarios[sceneId], 0, 0)
+    } else {
+        // Fundo de fallback para confirmar que o canvas funciona
+        ctx.fillStyle = "#87CEEB"
+        ctx.fillRect(0, 0, mycanvas.width, mycanvas.height)
+        ctx.fillStyle = "#5a8a3c"
+        ctx.fillRect(0, floor, mycanvas.width, mycanvas.height - floor)
     }
 
-    if (pinguim.image.complete && pinguim.image.naturalWidth > 0) {
+    // Escolhe sprite
+    let sprite = idleImg  // default: idle
 
-        // Escolhe o sprite correto conforme o estado do personagem
-        let sprite
-
-        if (!pinguim.noChao) {
-            // No ar → tenta usar frame de pulo, senão usa corrida
-            const jf = jumpFrames[frameAtual]
-            if (jf && jf.complete && jf.naturalWidth > 0 && !jf.dataset.falhou) {
-                sprite = jf
-            } else {
-                sprite = runFrames[frameAtual]
-            }
-        } else if (teclas.a || teclas.d) {
-            // No chão e em movimento → animação de corrida
-            sprite = runFrames[frameAtual]
-        } else {
-            // Parado → idle
-            sprite = pinguim.image
-        }
-
-        // Garante que o sprite escolhido está carregado; senão usa idle
-        if (!sprite || !sprite.complete || sprite.naturalWidth === 0) {
-            sprite = pinguim.image
-        }
-
-        ctx.save()
-
-        if (pinguim.direcao === -1) {
-            // Espelha horizontalmente sem deslocar a posição
-            ctx.translate(pinguim.x + sprite.width, 0)
-            ctx.scale(-1, 1)
-            ctx.drawImage(sprite, 0, pinguim.y)
-        } else {
-            ctx.drawImage(sprite, pinguim.x, pinguim.y)
-        }
-
-        ctx.restore()
+    if (!pinguim.noChao) {
+        // No ar → usa run frames como animação de pulo
+        const rf = runFrames[frameAtual]
+        if (spriteCarregado(rf)) sprite = rf
+    } else if (teclas.a || teclas.d) {
+        // A mover → run frames
+        const rf = runFrames[frameAtual]
+        if (spriteCarregado(rf)) sprite = rf
     }
+
+    // Fallback: se ainda nenhum sprite carregou, desenha rectângulo
+    if (!spriteCarregado(sprite)) {
+        ctx.fillStyle = "red"
+        ctx.fillRect(pinguim.x, pinguim.y === 0 ? floor - 64 : pinguim.y, 48, 64)
+        return
+    }
+
+    ctx.save()
+
+    if (pinguim.direcao === -1) {
+        // Espelha: translada para a direita do sprite, depois escala -1
+        ctx.translate(pinguim.x + sprite.width, 0)
+        ctx.scale(-1, 1)
+        ctx.drawImage(sprite, 0, pinguim.y)
+    } else {
+        ctx.drawImage(sprite, pinguim.x, pinguim.y)
+    }
+
+    ctx.restore()
+
+    // Debug HUD
+    ctx.fillStyle = "rgba(0,0,0,0.5)"
+    ctx.fillRect(4, 4, 220, 70)
+    ctx.fillStyle = "white"
+    ctx.font = "13px monospace"
+    ctx.fillText(`x:${Math.round(pinguim.x)}  y:${Math.round(pinguim.y)}`, 10, 22)
+    ctx.fillText(`noChao:${pinguim.noChao}  dir:${pinguim.direcao}`, 10, 40)
+    ctx.fillText(`frame:${frameAtual}  velY:${pinguim.velocidadeY.toFixed(1)}`, 10, 58)
 }
 
-function obterChao(x) {
-    return 399
-}
-
+// ── Atualizar ────────────────────────────────────────────
 function atualizar() {
+    if (teclas.a) { pinguim.x -= passos; pinguim.direcao = -1 }
+    if (teclas.d) { pinguim.x += passos; pinguim.direcao =  1 }
 
-    if (teclas.a) {
-        pinguim.x -= passos
-        pinguim.direcao = -1
-    }
-
-    if (teclas.d) {
-        pinguim.x += passos
-        pinguim.direcao = 1
-    }
-
+    // Gravidade
     pinguim.velocidadeY += gravidade
     pinguim.y += pinguim.velocidadeY
 
-    if (pinguim.image.complete && pinguim.image.naturalWidth > 0) {
+    // Altura do sprite (usa idle como referência)
+    const alturaSprite = spriteCarregado(idleImg) ? idleImg.height : 64
+    const yChao = floor - alturaSprite
 
-        const chao = obterChao(pinguim.x + pinguim.image.width / 2)
-        const yChao = chao - pinguim.image.height
-
-        if (pinguim.y >= yChao) {
-            pinguim.y = yChao
-            pinguim.velocidadeY = 0
-            pinguim.noChao = true
-        } else {
-            pinguim.noChao = false
-        }
-
-        const limite = mycanvas.width - pinguim.image.width
-
-        if (pinguim.x > limite) {
-            pinguim.x = limite
-        }
+    if (pinguim.y >= yChao) {
+        pinguim.y = yChao
+        pinguim.velocidadeY = 0
+        pinguim.noChao = true
+    } else {
+        pinguim.noChao = false
     }
 
-    if (pinguim.x < 0) {
-        pinguim.x = 0
-    }
+    // Limites horizontais
+    const larguraSprite = spriteCarregado(idleImg) ? idleImg.width : 48
+    pinguim.x = Math.max(0, Math.min(pinguim.x, mycanvas.width - larguraSprite))
 
-    // Anima quando em movimento OU quando no ar (pulo)
+    // Animação de frames
     if (teclas.a || teclas.d || !pinguim.noChao) {
         contadorAnimacao++
-        if (contadorAnimacao >= 10) {
+        if (contadorAnimacao >= 8) {
             contadorAnimacao = 0
-            frameAtual++
-            if (frameAtual >= runFrames.length) {
-                frameAtual = 0
-            }
+            frameAtual = (frameAtual + 1) % runFrames.length
         }
     } else {
-        // Parado no chão → reseta animação para idle
         frameAtual = 0
         contadorAnimacao = 0
     }
 }
 
+// ── Loop ─────────────────────────────────────────────────
 function loop() {
     atualizar()
     desenhar()
     requestAnimationFrame(loop)
 }
 
+// ── Teclas ───────────────────────────────────────────────
 window.addEventListener("keydown", (ev) => {
-
-    if (ev.code === "KeyA") {
-        teclas.a = true
-    }
-
-    if (ev.code === "KeyD") {
-        teclas.d = true
-    }
-
+    if (ev.code === "KeyA") teclas.a = true
+    if (ev.code === "KeyD") teclas.d = true
     if (ev.code === "KeyW" && pinguim.noChao) {
-        console.log("saltou")
         pinguim.velocidadeY = forcaSalto
         pinguim.noChao = false
+        console.log("🦘 saltou!")
     }
 })
 
 window.addEventListener("keyup", (ev) => {
-
-    if (ev.code === "KeyA") {
-        teclas.a = false
-    }
-
-    if (ev.code === "KeyD") {
-        teclas.d = false
-    }
+    if (ev.code === "KeyA") teclas.a = false
+    if (ev.code === "KeyD") teclas.d = false
 })
 
+// ── Iniciar ──────────────────────────────────────────────
 window.onload = () => {
+    // Garante que o personagem está posicionado mesmo se idle já carregou
+    if (spriteCarregado(idleImg)) {
+        pinguim.y = floor - idleImg.height
+        pinguim.noChao = true
+    }
     loop()
 }
