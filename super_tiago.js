@@ -1,7 +1,7 @@
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
 
-const floor = 440
+const floor = 394
 const passos = 5
 
 let sceneId = 0
