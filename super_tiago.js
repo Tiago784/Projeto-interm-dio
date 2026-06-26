@@ -15,7 +15,6 @@ cenarios[1].src = "imagens/super_tiago/cenario02_fundo.png"
 // ── Sprites ─────────────────────────────────────────────
 const idleImg = new Image()
 idleImg.src = "imagens/super_tiago/seylah_idle.png"
-idleImg.onload  = () => posicionarNoInicio()
 idleImg.onerror = () => console.error("ERRO: seylah_idle.png nao carregou")
 
 const runFrames = []
@@ -183,7 +182,12 @@ function atualizar() {
     const poco = pocos.find(p => sceneId < p.destinoCenario && centroX >= p.xInicio && centroX <= p.xFim)
     if (poco && teclas.s && pinguim.noChao) {
         sceneId = poco.destinoCenario
-        posicionarNoInicio()
+        const alturaS = spriteOk(idleImg) ? idleImg.height : 64
+        const inicio = iniciosPorCenario[sceneId]
+        pinguim.x = inicio.x
+        pinguim.y = inicio.y - alturaS
+        pinguim.velocidadeY = 0
+        pinguim.noChao = false
     }
 }
 
@@ -211,7 +215,14 @@ window.addEventListener("keyup", function(ev) {
     if (ev.code === "KeyS") teclas.s = false
 })
 
+// ── Início ────────────────────────────────────────────────
 window.onload = function() {
-    posicionarNoInicio()
-    loop()
+    idleImg.onload = () => {
+        posicionarNoInicio()
+        loop()
+    }
+    if (spriteOk(idleImg)) {
+        posicionarNoInicio()
+        loop()
+    }
 }
