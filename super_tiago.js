@@ -3,8 +3,6 @@ const ctx = mycanvas.getContext("2d")
 
 const floor = 399
 const passos = 5
-const gravidade = 0.6
-const forcaSalto = -12
 
 let sceneId = 0
 
@@ -18,17 +16,12 @@ cenarios[0].src = "imagens/super_tiago/cenario01_fundo.png"
 cenarios[1].src = "imagens/super_tiago/cenario02_fundo.png"
 cenarios[2].src = "imagens/super_tiago/cenario03_fundo.png"
 
-const seylah = {
+const pinguim = {
     image: new Image(),
-    x: 300,
-    y: floor - 83,
-    largura: 64,
-    altura: 83,
-    velocidadeY: 0,
-    noChao: true
+    x: 300
 }
 
-seylah.image.src = "imagens/seylah_idle.png"
+pinguim.image.src = "imagens/super_tiago/pinguim.png"
 
 const teclas = {
     a: false,
@@ -53,50 +46,31 @@ function desenhar() {
         ctx.drawImage(cenarios[sceneId], 0, 0)
     }
 
-    if (seylah.image.complete) {
+    if (pinguim.image.complete) {
         ctx.drawImage(
-            seylah.image,
-            seylah.x,
-            seylah.y,
-            seylah.largura,
-            seylah.altura
+            pinguim.image,
+            pinguim.x,
+            floor - pinguim.image.height
         )
     }
 }
 
 function atualizar() {
 
-    // Movimento horizontal
     if (teclas.a) {
-        seylah.x -= passos
+        pinguim.x -= passos
     }
 
     if (teclas.d) {
-        seylah.x += passos
+        pinguim.x += passos
     }
 
-    // Gravidade
-    seylah.velocidadeY += gravidade
-    seylah.y += seylah.velocidadeY
-
-    // Chão
-    const yChao = floor - seylah.altura
-
-    if (seylah.y >= yChao) {
-        seylah.y = yChao
-        seylah.velocidadeY = 0
-        seylah.noChao = true
-    } else {
-        seylah.noChao = false
+    if (pinguim.x < 0) {
+        pinguim.x = 0
     }
 
-    // Limites
-    if (seylah.x < 0) {
-        seylah.x = 0
-    }
-
-    if (seylah.x > mycanvas.width - seylah.largura) {
-        seylah.x = mycanvas.width - seylah.largura
+    if (pinguim.x > mycanvas.width - pinguim.image.width) {
+        pinguim.x = mycanvas.width - pinguim.image.width
     }
 }
 
@@ -115,15 +89,6 @@ window.addEventListener("keydown", (ev) => {
     if (ev.key === "d" || ev.key === "D") {
         teclas.d = true
     }
-
-    // W para saltar
-    if (
-        (ev.key === "w" || ev.key === "W") &&
-        seylah.noChao
-    ) {
-        seylah.velocidadeY = forcaSalto
-        seylah.noChao = false
-    }
 })
 
 window.addEventListener("keyup", (ev) => {
@@ -140,15 +105,14 @@ window.addEventListener("keyup", (ev) => {
     if (ev.code === "ArrowDown") {
 
         const juntoAoPoco =
-            seylah.x >= poco.x &&
-            seylah.x <= poco.x + poco.largura
+            pinguim.x >= poco.x &&
+            pinguim.x <= poco.x + poco.largura
 
         if (sceneId === 0 && juntoAoPoco) {
 
             sceneId = 1
 
-            seylah.x = 80
-            seylah.y = floor - seylah.altura
+            pinguim.x = 80
         }
     }
 
@@ -159,8 +123,7 @@ window.addEventListener("keyup", (ev) => {
 
             sceneId = 0
 
-            seylah.x = 430
-            seylah.y = floor - seylah.altura
+            pinguim.x = 430
         }
     }
 
@@ -168,15 +131,14 @@ window.addEventListener("keyup", (ev) => {
     if (ev.code === "ArrowRight") {
 
         const juntoDaPorta =
-            seylah.x >= portaSubterranea.x &&
-            seylah.x <= portaSubterranea.x + portaSubterranea.largura
+            pinguim.x >= portaSubterranea.x &&
+            pinguim.x <= portaSubterranea.x + portaSubterranea.largura
 
         if (sceneId === 1 && juntoDaPorta) {
 
             sceneId = 2
 
-            seylah.x = 80
-            seylah.y = floor - seylah.altura
+            pinguim.x = 80
         }
     }
 
@@ -187,8 +149,7 @@ window.addEventListener("keyup", (ev) => {
 
             sceneId = 1
 
-            seylah.x = 520
-            seylah.y = floor - seylah.altura
+            pinguim.x = 520
         }
     }
 })
