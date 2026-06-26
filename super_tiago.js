@@ -139,41 +139,19 @@ function desenhar() {
 }
 
 // ── Atualizar ─────────────────────────────────────────────
-// ── Atualizar ─────────────────────────────────────────────
 function atualizar() {
-    const alturaSprite = spriteOk(idleImg) ? idleImg.height : 64
-    const larguraSprite = spriteOk(idleImg) ? idleImg.width : 48
-    
-    // Guardamos a posição X antiga antes de mover
-    const xAntigo = pinguim.x
-
-    // 1. Tentar mover horizontalmente
     if (teclas.a) { pinguim.x -= passos; pinguim.direcao = -1 }
     if (teclas.d) { pinguim.x += passos; pinguim.direcao =  1 }
 
-    // Limites do canvas para as laterais
-    pinguim.x = Math.max(0, Math.min(pinguim.x, mycanvas.width - larguraSprite))
-
-    // 2. SISTEMA DE PAREDE: Verificar se colidimos de lado
-    // Calculamos o chão na nova posição X
-    const chaoNaNovaPosicao = obterChao(pinguim.x + larguraSprite / 2)
-    const yChaoNovo = chaoNaNovaPosicao - alturaSprite
-
-    // Se o pinguim está no chão (ou quase) e a nova plataforma é mais alta do que o corpo dele conseguiria subir a andar (ex: um degrau maior que 5 píxeis)
-    if (pinguim.noChao && (pinguim.y - yChaoNovo > 5)) {
-        // Bloqueia o movimento: volta para a posição X anterior
-        pinguim.x = xAntigo;
-    }
-
-    // 3. Aplicar gravidade e movimento vertical
     pinguim.velocidadeY += gravidade
     pinguim.y += pinguim.velocidadeY
 
-    // Atualizar a deteção do chão com a posição X (já validada)
+    const alturaSprite = spriteOk(idleImg) ? idleImg.height : 64
+    const larguraSprite = spriteOk(idleImg) ? idleImg.width : 48
+
     const chaoY = obterChao(pinguim.x + larguraSprite / 2)
     const yChao = chaoY - alturaSprite
 
-    // Colisão com o chão
     if (pinguim.y >= yChao) {
         pinguim.y = yChao
         pinguim.velocidadeY = 0
@@ -182,7 +160,8 @@ function atualizar() {
         pinguim.noChao = false
     }
 
-    // ── Animação ───────────────────────────────────────────
+    pinguim.x = Math.max(0, Math.min(pinguim.x, mycanvas.width - larguraSprite))
+
     if (teclas.a || teclas.d || !pinguim.noChao) {
         contadorAnimacao++
         if (contadorAnimacao >= 8) {
@@ -193,19 +172,6 @@ function atualizar() {
         frameAtual = 0
         contadorAnimacao = 0
     }
-
-    // ── Detetar poço + tecla S ───────────────────────────
-    const centroX = pinguim.x + larguraSprite / 2
-    const poco = pocos.find(p => sceneId < p.destinoCenario && centroX >= p.xInicio && centroX <= p.xFim)
-    if (poco && teclas.s && pinguim.noChao) {
-        sceneId = poco.destinoCenario
-        const inicio = iniciosPorCenario[sceneId]
-        pinguim.x = inicio.x
-        pinguim.y = inicio.y
-        pinguim.velocidadeY = 0
-        pinguim.noChao = false
-    }
-}
 
     // ── Detetar poço + tecla S ───────────────────────────
     const centroX = pinguim.x + larguraSprite / 2
