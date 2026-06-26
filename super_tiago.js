@@ -35,17 +35,16 @@ const pinguim = {
 
 // ── Plataformas por cenário ──────────────────────────────
 const plataformasCenario1 = [
-    { xInicio:   0, xFim: 165, y: 210 },
-    { xInicio:  40, xFim: 155, y: 305 },
-    { xInicio: 165, xFim: 265, y: 210 },
-    { xInicio: 295, xFim: 500, y: 210 },
-    { xInicio: 500, xFim: 530, y: 250 },
-    { xInicio: 530, xFim: 640, y: 210 },
+    { xInicio:   0, xFim: 165, y: 420 },
+    { xInicio: 165, xFim: 265, y: 420 },
+    { xInicio: 295, xFim: 500, y: 420 },
+    { xInicio: 500, xFim: 530, y: 380 },
+    { xInicio: 530, xFim: 640, y: 420 },
 ]
 
 const plataformasCenario2 = [
-    { xInicio:   0, xFim: 420, y: 390 },
-    { xInicio: 470, xFim: 640, y: 390 },
+    { xInicio:   0, xFim: 420, y: 420 },
+    { xInicio: 470, xFim: 640, y: 420 },
 ]
 
 // ── Poços ────────────────────────────────────────────────
@@ -59,15 +58,15 @@ function plataformasAtuais() {
 
 // ── Posições de início por cenário ───────────────────────
 const iniciosPorCenario = [
-    { x: 265, y: 146 },
-    { x: 380, y: 326 },
+    { x: 300, y: 300 },
+    { x: 380, y: 300 },
 ]
 
 function posicionarNoInicio() {
     const inicio = iniciosPorCenario[sceneId]
     pinguim.x = inicio.x
     pinguim.y = inicio.y
-    pinguim.noChao = true
+    pinguim.noChao = false
     pinguim.velocidadeY = 0
 }
 
@@ -181,7 +180,7 @@ function atualizar() {
         pinguim.x = inicio.x
         pinguim.y = inicio.y
         pinguim.velocidadeY = 0
-        pinguim.noChao = true
+        pinguim.noChao = false
     }
 }
 
