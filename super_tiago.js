@@ -16,15 +16,16 @@ cenarios[0].src = "imagens/super_tiago/cenario01_fundo.png"
 cenarios[1].src = "imagens/super_tiago/cenario02_fundo.png"
 cenarios[2].src = "imagens/super_tiago/cenario03_fundo.png"
 
-const pinguim = {
+const seylah = {
     image: new Image(),
     x: 300,
-    destinoX: 300
+    destinoX: 300,
+    largura: 80,
+    altura: 104
 }
 
-pinguim.image.src = "imagens/super_tiago/pinguim.png"
+seylah.image.src = "imagens/seylah_idle.png"
 
-// zonas de transição
 const poco = {
     x: 420,
     largura: 50
@@ -43,35 +44,42 @@ function desenhar() {
         ctx.drawImage(cenarios[sceneId], 0, 0)
     }
 
-    if (pinguim.image.complete) {
+    if (seylah.image.complete) {
+
         ctx.drawImage(
-            pinguim.image,
-            pinguim.x,
-            floor - pinguim.image.height
+            seylah.image,
+            seylah.x,
+            floor - seylah.altura,
+            seylah.largura,
+            seylah.altura
         )
     }
 }
 
 function atualizar() {
 
-    if (pinguim.x < pinguim.destinoX) {
-        pinguim.x += Math.min(
+    if (seylah.x < seylah.destinoX) {
+
+        seylah.x += Math.min(
             passos,
-            pinguim.destinoX - pinguim.x
+            seylah.destinoX - seylah.x
         )
     }
 
-    if (pinguim.x > pinguim.destinoX) {
-        pinguim.x -= Math.min(
+    if (seylah.x > seylah.destinoX) {
+
+        seylah.x -= Math.min(
             passos,
-            pinguim.x - pinguim.destinoX
+            seylah.x - seylah.destinoX
         )
     }
 }
 
 function loop() {
+
     atualizar()
     desenhar()
+
     requestAnimationFrame(loop)
 }
 
@@ -79,7 +87,7 @@ mycanvas.addEventListener("click", (ev) => {
 
     const rect = mycanvas.getBoundingClientRect()
 
-    pinguim.destinoX =
+    seylah.destinoX =
         ev.clientX - rect.left
 })
 
@@ -89,15 +97,15 @@ window.addEventListener("keyup", (ev) => {
     if (ev.code === "ArrowDown") {
 
         const juntoAoPoco =
-            pinguim.x >= poco.x &&
-            pinguim.x <= poco.x + poco.largura
+            seylah.x >= poco.x &&
+            seylah.x <= poco.x + poco.largura
 
         if (sceneId === 0 && juntoAoPoco) {
 
             sceneId = 1
 
-            pinguim.x = 80
-            pinguim.destinoX = 80
+            seylah.x = 80
+            seylah.destinoX = 80
         }
     }
 
@@ -106,38 +114,38 @@ window.addEventListener("keyup", (ev) => {
 
         if (sceneId === 1) {
 
-            pinguim.x = 430
-            pinguim.destinoX = 430
+            seylah.x = 430
+            seylah.destinoX = 430
 
             sceneId = 0
         }
     }
 
-    // Entrar na porta do cenário 2
+    // Entrar na porta
     if (ev.code === "ArrowRight") {
 
         const juntoDaPorta =
-            pinguim.x >= portaSubterranea.x &&
-            pinguim.x <= portaSubterranea.x + portaSubterranea.largura
+            seylah.x >= portaSubterranea.x &&
+            seylah.x <= portaSubterranea.x + portaSubterranea.largura
 
         if (sceneId === 1 && juntoDaPorta) {
 
             sceneId = 2
 
-            pinguim.x = 80
-            pinguim.destinoX = 80
+            seylah.x = 80
+            seylah.destinoX = 80
         }
     }
 
-    // Voltar do cenário 2
+    // Voltar
     if (ev.code === "ArrowLeft") {
 
         if (sceneId === 2) {
 
             sceneId = 1
 
-            pinguim.x = 520
-            pinguim.destinoX = 520
+            seylah.x = 520
+            seylah.destinoX = 520
         }
     }
 })
