@@ -1,4 +1,4 @@
-alert("JS NOVO")
+alert("VERSAO NOVA 12345")
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
 
