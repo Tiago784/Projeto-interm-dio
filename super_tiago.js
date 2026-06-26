@@ -7,11 +7,12 @@ const forcaSalto = -15
 
 let sceneId = 0
 
-const cenarios = [new Image(), new Image(), new Image()]
+// ── Cenários ────────────────────────────────────────────
+const cenarios = [new Image(), new Image()]
 cenarios[0].src = "imagens/super_tiago/cenario01_fundo.png"
 cenarios[1].src = "imagens/super_tiago/cenario02_fundo.png"
-cenarios[2].src = "imagens/super_tiago/cenario03_fundo.png"
 
+// ── Sprites ─────────────────────────────────────────────
 const idleImg = new Image()
 idleImg.src = "imagens/super_tiago/seylah_idle.png"
 idleImg.onload  = () => posicionarNoInicio()
@@ -24,6 +25,7 @@ for (let i = 1; i <= 5; i++) {
     runFrames.push(img)
 }
 
+// ── Personagem ───────────────────────────────────────────
 const pinguim = {
     x: 0,
     y: 0,
@@ -32,60 +34,70 @@ const pinguim = {
     direcao: 1
 }
 
-// ── Chão do cenário ──────────────────────────────────────
-// Mapeado a partir da imagem fornecida (canvas 640x480)
-// Cada entrada: { xInicio, xFim, y } — y é onde o personagem assenta
-//
-//  Plataformas visíveis na imagem:
-//   - Plataformas dentro da caixa esquerda (escadas/degraus)
-//   - Chão principal do nível do meio
-//   - Zona da corda (abertura no chão)
-//   - Chão do lado direito
-//   - Plataforma da sala direita
-
-const plataformas = [
+// ── Plataformas por cenário ──────────────────────────────
+// Cenário 1 (interior, 640x480)
+// Corda ao centro ~x=265-295, chão principal ~y=210
+// Degraus na caixa esquerda, corredor do meio, sala direita
+const plataformasCenario1 = [
     // Chão principal esquerdo (antes da caixa)
-    { xInicio:   0, xFim: 310, y: 370 },
+    { xInicio:   0, xFim: 165, y: 210 },
 
-    // Degraus dentro da caixa esquerda (de baixo para cima)
-    { xInicio:  75, xFim: 155, y: 530 },
-    { xInicio:  95, xFim: 175, y: 495 },
-    { xInicio: 115, xFim: 195, y: 460 },
-    { xInicio: 135, xFim: 215, y: 425 },
-    { xInicio: 155, xFim: 235, y: 390 },
-    { xInicio: 175, xFim: 255, y: 355 },
-    { xInicio: 195, xFim: 275, y: 320 },
-    { xInicio: 215, xFim: 295, y: 285 },
+    // Degraus dentro da caixa esquerda (visíveis na imagem)
+    { xInicio:  40, xFim: 155, y: 305 },
+    { xInicio:  40, xFim: 155, y: 285 },
+    { xInicio:  40, xFim: 155, y: 265 },
+    { xInicio:  40, xFim: 155, y: 245 },
+    { xInicio:  40, xFim: 155, y: 225 },
 
-    // Chão do corredor do meio (entre caixa e corda)
-    { xInicio: 310, xFim: 490, y: 370 },
+    // Chão do corredor do meio
+    { xInicio: 165, xFim: 265, y: 210 },
 
-    // Depois da corda até à parede direita
-    { xInicio: 610, xFim: 900, y: 310 },
+    // Após a corda (lado direito)
+    { xInicio: 295, xFim: 500, y: 210 },
 
-    // Chão da sala direita (zona inferior)
-    { xInicio: 870, xFim: 1100, y: 460 },
-
-    // Chão do lado direito da sala
-    { xInicio: 870, xFim: 1100, y: 310 },
+    // Abertura/sala direita (nível mais baixo)
+    { xInicio: 500, xFim: 530, y: 250 },
+    { xInicio: 530, xFim: 640, y: 210 },
 ]
 
-// Posição do fim da corda — onde o personagem começa
-const CORDA_X = 490   // x do centro da corda na imagem
-const CORDA_Y_FIM = 430 // y do fim da corda
+// Cenário 2 (exterior noite, 640x480)
+// Chão geral ~y=390, abertura na zona da corda ~x=430-470
+const plataformasCenario2 = [
+    // Chão contínuo à esquerda (inclui zona da casa)
+    { xInicio:   0, xFim: 420, y: 390 },
+
+    // Após a abertura da corda
+    { xInicio: 470, xFim: 640, y: 390 },
+]
+
+// Poços por cenário: zona onde premir S muda de cenário
+const pocos = [
+    { xInicio: 265, xFim: 295, destinoCenario: 1 },  // Cenário 1 → 2
+]
+
+function plataformasAtuais() {
+    return sceneId === 0 ? plataformasCenario1 : plataformasCenario2
+}
+
+// Posições de início por cenário (em cima da corda)
+const iniciosPorCenario = [
+    { x: 265, y: 150 },   // Cenário 1: ao lado da corda
+    { x: 420, y: 320 },   // Cenário 2: ao lado da corda exterior
+]
 
 function posicionarNoInicio() {
     const alturaSprite = spriteOk(idleImg) ? idleImg.height : 64
-    pinguim.x = CORDA_X - (spriteOk(idleImg) ? idleImg.width / 2 : 24)
-    pinguim.y = CORDA_Y_FIM - alturaSprite
+    const inicio = iniciosPorCenario[sceneId]
+    pinguim.x = inicio.x
+    pinguim.y = inicio.y - alturaSprite
     pinguim.noChao = false
     pinguim.velocidadeY = 0
 }
 
 // Devolve o y do chão para uma dada posição x
 function obterChao(x) {
-    let melhorY = 999  // valor grande = cair indefinidamente se não encontrar
-    for (let p of plataformas) {
+    let melhorY = 999
+    for (let p of plataformasAtuais()) {
         if (x >= p.xInicio && x <= p.xFim) {
             if (p.y < melhorY) melhorY = p.y
         }
@@ -93,15 +105,17 @@ function obterChao(x) {
     return melhorY
 }
 
+// ── Animação ─────────────────────────────────────────────
 let frameAtual = 0
 let contadorAnimacao = 0
 
-const teclas = { a: false, d: false }
+const teclas = { a: false, d: false, s: false }
 
 function spriteOk(img) {
     return img && img.complete && img.naturalWidth > 0
 }
 
+// ── Desenhar ─────────────────────────────────────────────
 function desenhar() {
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
 
@@ -133,8 +147,20 @@ function desenhar() {
         ctx.drawImage(sprite, pinguim.x, pinguim.y)
     }
     ctx.restore()
+
+    // Dica do poço
+    const larguraSprite = spriteOk(idleImg) ? idleImg.width : 48
+    const centroX = pinguim.x + larguraSprite / 2
+    const poco = pocos.find(p => sceneId < p.destinoCenario && centroX >= p.xInicio && centroX <= p.xFim)
+    if (poco && pinguim.noChao) {
+        ctx.fillStyle = "white"
+        ctx.font = "14px Arial"
+        ctx.textAlign = "center"
+        ctx.fillText("▼ S para descer", mycanvas.width / 2, 30)
+    }
 }
 
+// ── Atualizar ─────────────────────────────────────────────
 function atualizar() {
     if (teclas.a) { pinguim.x -= passos; pinguim.direcao = -1 }
     if (teclas.d) { pinguim.x += passos; pinguim.direcao =  1 }
@@ -168,17 +194,28 @@ function atualizar() {
         frameAtual = 0
         contadorAnimacao = 0
     }
+
+    // ── Detetar poço + tecla S ───────────────────────────
+    const centroX = pinguim.x + larguraSprite / 2
+    const poco = pocos.find(p => sceneId < p.destinoCenario && centroX >= p.xInicio && centroX <= p.xFim)
+    if (poco && teclas.s && pinguim.noChao) {
+        sceneId = poco.destinoCenario
+        posicionarNoInicio()
+    }
 }
 
+// ── Loop principal ────────────────────────────────────────
 function loop() {
     atualizar()
     desenhar()
     requestAnimationFrame(loop)
 }
 
+// ── Controlos ─────────────────────────────────────────────
 window.addEventListener("keydown", function(ev) {
     if (ev.code === "KeyA") teclas.a = true
     if (ev.code === "KeyD") teclas.d = true
+    if (ev.code === "KeyS") teclas.s = true
     if (ev.code === "KeyW" && pinguim.noChao) {
         pinguim.velocidadeY = forcaSalto
         pinguim.noChao = false
@@ -188,6 +225,7 @@ window.addEventListener("keydown", function(ev) {
 window.addEventListener("keyup", function(ev) {
     if (ev.code === "KeyA") teclas.a = false
     if (ev.code === "KeyD") teclas.d = false
+    if (ev.code === "KeyS") teclas.s = false
 })
 
 window.onload = function() {
