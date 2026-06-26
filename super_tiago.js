@@ -132,6 +132,7 @@ function atualizar() {
         pinguim.x = 0
     }
 }
+
 function loop() {
     atualizar()
     desenhar()
@@ -182,7 +183,7 @@ window.addEventListener("keyup", (ev) => {
     // Sair do poço
     if (ev.code === "ArrowUp") {
 
-        if (sceneId === 1) {z
+        if (sceneId === 1) {
 
             sceneId = 0
 
