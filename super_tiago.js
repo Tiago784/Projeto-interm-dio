@@ -3,6 +3,8 @@ const ctx = mycanvas.getContext("2d")
 
 const floor = 399
 const passos = 5
+const gravidade = 0.6
+const forcaSalto = -12
 
 let sceneId = 0
 
@@ -19,12 +21,19 @@ cenarios[2].src = "imagens/super_tiago/cenario03_fundo.png"
 const seylah = {
     image: new Image(),
     x: 300,
-    destinoX: 300,
-    largura: 80,
-    altura: 104
+    y: floor - 83,
+    largura: 64,
+    altura: 83,
+    velocidadeY: 0,
+    noChao: true
 }
 
 seylah.image.src = "imagens/seylah_idle.png"
+
+const teclas = {
+    a: false,
+    d: false
+}
 
 const poco = {
     x: 420,
@@ -45,11 +54,10 @@ function desenhar() {
     }
 
     if (seylah.image.complete) {
-
         ctx.drawImage(
             seylah.image,
             seylah.x,
-            floor - seylah.altura,
+            seylah.y,
             seylah.largura,
             seylah.altura
         )
@@ -58,40 +66,75 @@ function desenhar() {
 
 function atualizar() {
 
-    if (seylah.x < seylah.destinoX) {
-
-        seylah.x += Math.min(
-            passos,
-            seylah.destinoX - seylah.x
-        )
+    // Movimento horizontal
+    if (teclas.a) {
+        seylah.x -= passos
     }
 
-    if (seylah.x > seylah.destinoX) {
+    if (teclas.d) {
+        seylah.x += passos
+    }
 
-        seylah.x -= Math.min(
-            passos,
-            seylah.x - seylah.destinoX
-        )
+    // Gravidade
+    seylah.velocidadeY += gravidade
+    seylah.y += seylah.velocidadeY
+
+    // Chão
+    const yChao = floor - seylah.altura
+
+    if (seylah.y >= yChao) {
+        seylah.y = yChao
+        seylah.velocidadeY = 0
+        seylah.noChao = true
+    } else {
+        seylah.noChao = false
+    }
+
+    // Limites
+    if (seylah.x < 0) {
+        seylah.x = 0
+    }
+
+    if (seylah.x > mycanvas.width - seylah.largura) {
+        seylah.x = mycanvas.width - seylah.largura
     }
 }
 
 function loop() {
-
     atualizar()
     desenhar()
-
     requestAnimationFrame(loop)
 }
 
-mycanvas.addEventListener("click", (ev) => {
+window.addEventListener("keydown", (ev) => {
 
-    const rect = mycanvas.getBoundingClientRect()
+    if (ev.key === "a" || ev.key === "A") {
+        teclas.a = true
+    }
 
-    seylah.destinoX =
-        ev.clientX - rect.left
+    if (ev.key === "d" || ev.key === "D") {
+        teclas.d = true
+    }
+
+    // W para saltar
+    if (
+        (ev.key === "w" || ev.key === "W") &&
+        seylah.noChao
+    ) {
+        seylah.velocidadeY = forcaSalto
+        seylah.noChao = false
+    }
 })
 
 window.addEventListener("keyup", (ev) => {
+
+    if (ev.key === "a" || ev.key === "A") {
+        teclas.a = false
+    }
+
+    if (ev.key === "d" || ev.key === "D") {
+        teclas.d = false
+    }
 
     // Entrar no poço
     if (ev.code === "ArrowDown") {
@@ -105,7 +148,7 @@ window.addEventListener("keyup", (ev) => {
             sceneId = 1
 
             seylah.x = 80
-            seylah.destinoX = 80
+            seylah.y = floor - seylah.altura
         }
     }
 
@@ -114,10 +157,10 @@ window.addEventListener("keyup", (ev) => {
 
         if (sceneId === 1) {
 
-            seylah.x = 430
-            seylah.destinoX = 430
-
             sceneId = 0
+
+            seylah.x = 430
+            seylah.y = floor - seylah.altura
         }
     }
 
@@ -133,7 +176,7 @@ window.addEventListener("keyup", (ev) => {
             sceneId = 2
 
             seylah.x = 80
-            seylah.destinoX = 80
+            seylah.y = floor - seylah.altura
         }
     }
 
@@ -145,7 +188,7 @@ window.addEventListener("keyup", (ev) => {
             sceneId = 1
 
             seylah.x = 520
-            seylah.destinoX = 520
+            seylah.y = floor - seylah.altura
         }
     }
 })
