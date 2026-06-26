@@ -29,29 +29,6 @@ const pinguim = {
 
 pinguim.image.src = "imagens/super_tiago/seylah_idle.png"
 
-// ANIMAÇÕES
-
-const runFrames = []
-const jumpFrames = []
-
-for (let i = 1; i <= 5; i++) {
-    const img = new Image()
-    img.src = `imagens/super_tiago/run${i}.png`
-    runFrames.push(img)
-}
-
-for (let i = 1; i <= 5; i++) {
-    const img = new Image()
-    img.src = `imagens/super_tiago/jump${i}.png`
-    jumpFrames.push(img)
-}
-
-const fallFrame = new Image()
-fallFrame.src = "imagens/super_tiago/fall.png"
-
-let frameAtual = 0
-let contadorAnimacao = 0
-
 const teclas = {
     a: false,
     d: false
@@ -71,11 +48,7 @@ pinguim.image.onload = () => {
     pinguim.y = floor - pinguim.image.height
     pinguim.noChao = true
 }
-console.log(
-    "A:", teclas.a,
-    "D:", teclas.d,
-    "frame:", frameAtual
-)
+
 function desenhar() {
 
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
@@ -84,21 +57,31 @@ function desenhar() {
         ctx.drawImage(cenarios[sceneId], 0, 0)
     }
 
-    ctx.drawImage(
-        runFrames[0],
-        pinguim.x,
-        pinguim.y
-    )
+    if (
+        pinguim.image.complete &&
+        pinguim.image.naturalWidth > 0
+    ) {
+        ctx.drawImage(
+            pinguim.image,
+            pinguim.x,
+            pinguim.y
+        )
+    }
+}
+
 function obterChao(x) {
 
+    // plataforma esquerda
     if (x < 160) {
         return 320
     }
 
+    // parte central
     if (x < 500) {
         return 400
     }
 
+    // zona da porta
     return 360
 }
 
@@ -120,30 +103,25 @@ function atualizar() {
         pinguim.image.naturalWidth > 0
     ) {
 
-        const chao =
-            obterChao(
-                pinguim.x +
-                pinguim.image.width / 2
-            )
+        const chao = obterChao(
+            pinguim.x + pinguim.image.width / 2
+        )
 
         const yChao =
-            chao -
-            pinguim.image.height
+            chao - pinguim.image.height
 
         if (pinguim.y >= yChao) {
 
             pinguim.y = yChao
             pinguim.velocidadeY = 0
             pinguim.noChao = true
-        }
-        else {
+        } else {
 
             pinguim.noChao = false
         }
 
         const limite =
-            mycanvas.width -
-            pinguim.image.width
+            mycanvas.width - pinguim.image.width
 
         if (pinguim.x > limite) {
             pinguim.x = limite
@@ -153,38 +131,10 @@ function atualizar() {
     if (pinguim.x < 0) {
         pinguim.x = 0
     }
-
-    // ANIMAÇÃO CORRIDA
-
-    if (
-        (teclas.a || teclas.d) &&
-        pinguim.noChao
-    ) {
-
-        contadorAnimacao++
-
-        if (contadorAnimacao >= 12) {
-
-            contadorAnimacao = 0
-
-            frameAtual++
-
-            if (frameAtual >= runFrames.length) {
-                frameAtual = 0
-            }
-        }
-    }
-    else {
-
-        frameAtual = 0
-    }
 }
-
 function loop() {
-
     atualizar()
     desenhar()
-
     requestAnimationFrame(loop)
 }
 
@@ -198,10 +148,7 @@ window.addEventListener("keydown", (ev) => {
         teclas.d = true
     }
 
-    if (
-        ev.code === "KeyW" &&
-        pinguim.noChao
-    ) {
+    if (ev.code === "KeyW" && pinguim.noChao) {
         pinguim.velocidadeY = forcaSalto
         pinguim.noChao = false
     }
@@ -217,6 +164,7 @@ window.addEventListener("keyup", (ev) => {
         teclas.d = false
     }
 
+    // Entrar no poço
     if (ev.code === "ArrowDown") {
 
         const juntoAoPoco =
@@ -226,19 +174,23 @@ window.addEventListener("keyup", (ev) => {
         if (sceneId === 0 && juntoAoPoco) {
 
             sceneId = 1
+
             pinguim.x = 80
         }
     }
 
+    // Sair do poço
     if (ev.code === "ArrowUp") {
 
-        if (sceneId === 1) {
+        if (sceneId === 1) {z
 
             sceneId = 0
+
             pinguim.x = 430
         }
     }
 
+    // Entrar na porta
     if (ev.code === "ArrowRight") {
 
         const juntoDaPorta =
@@ -248,15 +200,18 @@ window.addEventListener("keyup", (ev) => {
         if (sceneId === 1 && juntoDaPorta) {
 
             sceneId = 2
+
             pinguim.x = 80
         }
     }
 
+    // Voltar
     if (ev.code === "ArrowLeft") {
 
         if (sceneId === 2) {
 
             sceneId = 1
+
             pinguim.x = 520
         }
     }
