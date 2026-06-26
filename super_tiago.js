@@ -112,7 +112,24 @@ function desenhar() {
     }
 }
 function obterChao(x) {
-    return 399
+
+    // sala das plataformas à esquerda
+    if (x < 220) {
+        return 400
+    }
+
+    // corredor central
+    if (x < 690) {
+        return 345
+    }
+
+    // buraco antes da porta
+    if (x < 820) {
+        return 9999
+    }
+
+    // sala da porta
+    return 365
 }
 function atualizar() {
 
