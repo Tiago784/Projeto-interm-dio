@@ -79,18 +79,18 @@ function desenhar() {
         pinguim.image.complete &&
         pinguim.image.naturalWidth > 0
     ) {
+
         let sprite = pinguim.image
 
-if (teclas.a || teclas.d) {
+        if (teclas.a || teclas.d) {
+            sprite = runFrames[frameAtual]
+        }
 
-    sprite = runFrames[frameAtual]
-}
-
-ctx.drawImage(
-    sprite,
-    pinguim.x,
-    pinguim.y
-)
+        ctx.drawImage(
+            sprite,
+            pinguim.x,
+            pinguim.y
+        )
     }
 }
 
