@@ -1,3 +1,8 @@
+const run1 = new Image()
+run1.src = "imagens/super_tiago/run1.png"
+
+run1.onload = () => console.log("RUN1 OK")
+run1.onerror = () => console.log("RUN1 ERRO")
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
 
@@ -74,11 +79,18 @@ function desenhar() {
         pinguim.image.complete &&
         pinguim.image.naturalWidth > 0
     ) {
-        ctx.drawImage(
-            pinguim.image,
-            pinguim.x,
-            pinguim.y
-        )
+        let sprite = pinguim.image
+
+if (teclas.a || teclas.d) {
+
+    sprite = runFrames[frameAtual]
+}
+
+ctx.drawImage(
+    sprite,
+    pinguim.x,
+    pinguim.y
+)
     }
 }
 
