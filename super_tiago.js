@@ -20,8 +20,7 @@ const pinguim = {
     image: new Image(),
     x: 300
 }
-
-pinguim.image.src = "imagens/super_tiago/pinguim.png"
+pinguim.image.src = "imagens/super_tiago/seylah_idle.png"
 
 const teclas = {
     a: false,
@@ -46,7 +45,10 @@ function desenhar() {
         ctx.drawImage(cenarios[sceneId], 0, 0)
     }
 
-    if (pinguim.image.complete) {
+    if (
+        pinguim.image.complete &&
+        pinguim.image.naturalWidth > 0
+    ) {
         ctx.drawImage(
             pinguim.image,
             pinguim.x,
@@ -69,8 +71,16 @@ function atualizar() {
         pinguim.x = 0
     }
 
-    if (pinguim.x > mycanvas.width - pinguim.image.width) {
-        pinguim.x = mycanvas.width - pinguim.image.width
+    if (
+        pinguim.image.complete &&
+        pinguim.image.naturalWidth > 0
+    ) {
+        const limite =
+            mycanvas.width - pinguim.image.width
+
+        if (pinguim.x > limite) {
+            pinguim.x = limite
+        }
     }
 }
 
@@ -101,7 +111,6 @@ window.addEventListener("keyup", (ev) => {
         teclas.d = false
     }
 
-    // Entrar no poço
     if (ev.code === "ArrowDown") {
 
         const juntoAoPoco =
@@ -111,23 +120,19 @@ window.addEventListener("keyup", (ev) => {
         if (sceneId === 0 && juntoAoPoco) {
 
             sceneId = 1
-
             pinguim.x = 80
         }
     }
 
-    // Sair do poço
     if (ev.code === "ArrowUp") {
 
         if (sceneId === 1) {
 
             sceneId = 0
-
             pinguim.x = 430
         }
     }
 
-    // Entrar na porta
     if (ev.code === "ArrowRight") {
 
         const juntoDaPorta =
@@ -137,18 +142,15 @@ window.addEventListener("keyup", (ev) => {
         if (sceneId === 1 && juntoDaPorta) {
 
             sceneId = 2
-
             pinguim.x = 80
         }
     }
 
-    // Voltar
     if (ev.code === "ArrowLeft") {
 
         if (sceneId === 2) {
 
             sceneId = 1
-
             pinguim.x = 520
         }
     }
