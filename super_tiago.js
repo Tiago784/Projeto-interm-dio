@@ -123,7 +123,7 @@ function desenhar() {
     }
     ctx.restore()
 
-    
+   
     const larguraSprite = spriteOk(idleImg) ? idleImg.width : 48
     const centroX = pinguim.x + larguraSprite / 2
     const poco = pocos.find(p => sceneId < p.destinoCenario && centroX >= p.xInicio && centroX <= p.xFim)
