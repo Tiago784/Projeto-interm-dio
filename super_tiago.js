@@ -6,7 +6,16 @@ const passos = 5
 
 const gravidade = 0.6
 const forcaSalto = -15
+const run1 = new Image()
+run1.src = "imagens/super_tiago/run1.png"
 
+run1.onload = () => {
+    console.log("RUN1 CARREGADA")
+}
+
+run1.onerror = () => {
+    console.log("ERRO RUN1")
+}
 let sceneId = 0
 
 const cenarios = [
@@ -50,7 +59,10 @@ pinguim.image.onload = () => {
 }
 
 function desenhar() {
-
+ctx.drawImage(
+    run1,
+    pinguim.x,
+    pinguim.y
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
 
     if (cenarios[sceneId].complete) {
@@ -211,7 +223,7 @@ window.addEventListener("keyup", (ev) => {
 
         if (sceneId === 2) {
 
-            sceneId = 1
+            sceneId = 1 
 
             pinguim.x = 520
         }
