@@ -1,3 +1,4 @@
+alert("JS NOVO")
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
 
