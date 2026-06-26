@@ -59,10 +59,7 @@ pinguim.image.onload = () => {
 }
 
 function desenhar() {
-ctx.drawImage(
-    run1,
-    pinguim.x,
-    pinguim.y
+
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
 
     if (cenarios[sceneId].complete) {
