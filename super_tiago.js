@@ -74,18 +74,10 @@ function desenhar() {
         pinguim.image.complete &&
         pinguim.image.naturalWidth > 0
     ) {
-let sprite = pinguim.image
-
-if (teclas.a || teclas.d) {
-
-    sprite = runFrames[frameAtual]
-}
-
-ctx.drawImage(
-    sprite,
-    pinguim.x,
-    pinguim.y
-)
+        ctx.drawImage(
+            pinguim.image,
+            pinguim.x,
+            pinguim.y
         )
     }
 }
@@ -150,21 +142,7 @@ function atualizar() {
     if (pinguim.x < 0) {
         pinguim.x = 0
     }
-    if (teclas.a || teclas.d) {
-
-    contadorAnimacao++
-
-    if (contadorAnimacao >= 10) {
-
-        contadorAnimacao = 0
-
-        frameAtual++
-
-        if (frameAtual >= 5) {
-            frameAtual = 0
-        }
-    }
-}
+    
 }
 
 function loop() {
