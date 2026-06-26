@@ -24,6 +24,17 @@ const pinguim = {
 
 pinguim.image.src = "imagens/super_tiago/pinguim.png"
 
+// zonas de transição
+const poco = {
+    x: 420,
+    largura: 50
+}
+
+const portaSubterranea = {
+    x: 540,
+    largura: 60
+}
+
 function desenhar() {
 
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
@@ -74,15 +85,59 @@ mycanvas.addEventListener("click", (ev) => {
 
 window.addEventListener("keyup", (ev) => {
 
-    if (ev.code === "ArrowRight") {
-        if (sceneId < 2) {
-            sceneId++
+    // Entrar no poço
+    if (ev.code === "ArrowDown") {
+
+        const juntoAoPoco =
+            pinguim.x >= poco.x &&
+            pinguim.x <= poco.x + poco.largura
+
+        if (sceneId === 0 && juntoAoPoco) {
+
+            sceneId = 1
+
+            pinguim.x = 80
+            pinguim.destinoX = 80
         }
     }
 
+    // Sair do poço
+    if (ev.code === "ArrowUp") {
+
+        if (sceneId === 1) {
+
+            pinguim.x = 430
+            pinguim.destinoX = 430
+
+            sceneId = 0
+        }
+    }
+
+    // Entrar na porta do cenário 2
+    if (ev.code === "ArrowRight") {
+
+        const juntoDaPorta =
+            pinguim.x >= portaSubterranea.x &&
+            pinguim.x <= portaSubterranea.x + portaSubterranea.largura
+
+        if (sceneId === 1 && juntoDaPorta) {
+
+            sceneId = 2
+
+            pinguim.x = 80
+            pinguim.destinoX = 80
+        }
+    }
+
+    // Voltar do cenário 2
     if (ev.code === "ArrowLeft") {
-        if (sceneId > 0) {
-            sceneId--
+
+        if (sceneId === 2) {
+
+            sceneId = 1
+
+            pinguim.x = 520
+            pinguim.destinoX = 520
         }
     }
 })
