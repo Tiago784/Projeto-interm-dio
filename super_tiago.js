@@ -34,18 +34,19 @@ const pinguim = {
 }
 
 // ── Plataformas por cenário ──────────────────────────────
-// Cenário 1: chão preto começa em Y≈390
+// Cenário 1: chão preto começa em Y=399, poço entre X=430 e X=460
 const plataformasCenario1 = [
-    { xInicio:   0, xFim: 430, y: 390 },  // chão principal (antes do poço)
-    { xInicio: 460, xFim: 640, y: 390 },  // chão principal (depois do poço)
+    { xInicio:   0, xFim: 430, y: 399 },
+    { xInicio: 460, xFim: 640, y: 399 },
 ]
 
-// Cenário 2: plataformas interiores
+// Cenário 2: plataformas medidas com precisão das imagens
 const plataformasCenario2 = [
-    { xInicio:   0, xFim: 160, y: 310 },  // plataforma esquerda (topo da caixa)
-    { xInicio: 160, xFim: 280, y: 210 },  // degrau intermédio esquerdo
-    { xInicio: 280, xFim: 500, y: 245 },  // plataforma central
-    { xInicio: 500, xFim: 640, y: 210 },  // plataforma direita
+    { xInicio:  35, xFim: 160, y: 312 },  // caixa esquerda (topo)
+    { xInicio: 160, xFim: 280, y: 182 },  // degrau esquerdo
+    { xInicio: 280, xFim: 422, y: 222 },  // plataforma central baixa
+    { xInicio: 422, xFim: 632, y: 182 },  // plataforma central alta
+    { xInicio: 490, xFim: 632, y: 260 },  // plataforma direita baixa
 ]
 
 // ── Poços ────────────────────────────────────────────────
@@ -59,8 +60,8 @@ function plataformasAtuais() {
 
 // ── Posições de início por cenário ───────────────────────
 const iniciosPorCenario = [
-    { x: 300, y: 200 },
-    { x: 380, y: 100 },
+    { x: 300, y: 200 },   // cenário 1 - cai para o chão
+    { x: 340, y: 50  },   // cenário 2 - junto à corda, cai para plataforma central
 ]
 
 function posicionarNoInicio() {
@@ -135,12 +136,6 @@ function desenhar() {
         ctx.textAlign = "center"
         ctx.fillText("▼ S para descer", mycanvas.width / 2, 30)
     }
-
-    // DEBUG temporário - apaga quando estiver certo
-    ctx.fillStyle = "yellow"
-    ctx.font = "11px Arial"
-    ctx.textAlign = "left"
-    ctx.fillText("y: " + Math.round(pinguim.y) + "  chao: " + obterChao(pinguim.x + 24), 5, 15)
 }
 
 // ── Atualizar ─────────────────────────────────────────────
