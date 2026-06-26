@@ -1,4 +1,3 @@
-
 const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
 
@@ -29,6 +28,19 @@ const pinguim = {
 }
 
 pinguim.image.src = "imagens/super_tiago/seylah_idle.png"
+const runFrames = []
+
+for (let i = 1; i <= 5; i++) {
+
+    const img = new Image()
+
+    img.src = `imagens/super_tiago/run${i}.png`
+
+    runFrames.push(img)
+}
+
+let frameAtual = 0
+let contadorAnimacao = 0
 
 const teclas = {
     a: false,
@@ -62,10 +74,18 @@ function desenhar() {
         pinguim.image.complete &&
         pinguim.image.naturalWidth > 0
     ) {
-        ctx.drawImage(
-            pinguim.image,
-            pinguim.x,
-            pinguim.y
+let sprite = pinguim.image
+
+if (teclas.a || teclas.d) {
+
+    sprite = runFrames[frameAtual]
+}
+
+ctx.drawImage(
+    sprite,
+    pinguim.x,
+    pinguim.y
+)
         )
     }
 }
@@ -130,6 +150,21 @@ function atualizar() {
     if (pinguim.x < 0) {
         pinguim.x = 0
     }
+    if (teclas.a || teclas.d) {
+
+    contadorAnimacao++
+
+    if (contadorAnimacao >= 10) {
+
+        contadorAnimacao = 0
+
+        frameAtual++
+
+        if (frameAtual >= 5) {
+            frameAtual = 0
+        }
+    }
+}
 }
 
 function loop() {
