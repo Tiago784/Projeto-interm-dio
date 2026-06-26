@@ -71,7 +71,11 @@ pinguim.image.onload = () => {
     pinguim.y = floor - pinguim.image.height
     pinguim.noChao = true
 }
-
+console.log(
+    "A:", teclas.a,
+    "D:", teclas.d,
+    "frame:", frameAtual
+)
 function desenhar() {
 
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
@@ -80,44 +84,11 @@ function desenhar() {
         ctx.drawImage(cenarios[sceneId], 0, 0)
     }
 
-    let sprite = pinguim.image
-
-    // SALTO
-    if (pinguim.velocidadeY < -1) {
-
-        const indice = Math.min(
-            4,
-            Math.floor(Math.abs(pinguim.velocidadeY) / 3)
-        )
-
-        sprite = jumpFrames[indice]
-    }
-
-    // QUEDA
-    else if (pinguim.velocidadeY > 1) {
-
-        sprite = fallFrame
-    }
-
-    // CORRER
-    else if (teclas.a || teclas.d) {
-
-        sprite = runFrames[frameAtual]
-    }
-
-    if (
-        sprite &&
-        sprite.complete &&
-        sprite.naturalWidth > 0
-    ) {
-        ctx.drawImage(
-            sprite,
-            pinguim.x,
-            pinguim.y
-        )
-    }
-}
-
+    ctx.drawImage(
+        runFrames[0],
+        pinguim.x,
+        pinguim.y
+    )
 function obterChao(x) {
 
     if (x < 160) {
