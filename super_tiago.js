@@ -37,10 +37,6 @@ const pinguim = {
 const plataformasCenario1 = [
     { xInicio:   0, xFim: 165, y: 210 },
     { xInicio:  40, xFim: 155, y: 305 },
-    { xInicio:  40, xFim: 155, y: 285 },
-    { xInicio:  40, xFim: 155, y: 265 },
-    { xInicio:  40, xFim: 155, y: 245 },
-    { xInicio:  40, xFim: 155, y: 225 },
     { xInicio: 165, xFim: 265, y: 210 },
     { xInicio: 295, xFim: 500, y: 210 },
     { xInicio: 500, xFim: 530, y: 250 },
@@ -77,13 +73,13 @@ function posicionarNoInicio() {
 
 // ── Chão ─────────────────────────────────────────────────
 function obterChao(x) {
-    let melhorY = 999
+    let melhorY = -1
     for (let p of plataformasAtuais()) {
         if (x >= p.xInicio && x <= p.xFim) {
-            if (p.y < melhorY) melhorY = p.y
+            if (p.y > melhorY) melhorY = p.y
         }
     }
-    return melhorY
+    return melhorY === -1 ? mycanvas.height : melhorY
 }
 
 // ── Animação ─────────────────────────────────────────────
