@@ -87,27 +87,33 @@ function desenhar() {
             sprite = runFrames[frameAtual]
         }
 
-        ctx.drawImage(
-            sprite,
-            pinguim.x,
-            pinguim.y
-        )
+        ctx.save()
+
+        if (pinguim.direcao === -1) {
+
+            ctx.scale(-1, 1)
+
+            ctx.drawImage(
+                sprite,
+                -pinguim.x - sprite.width,
+                pinguim.y
+            )
+
+        } else {
+
+            ctx.drawImage(
+                sprite,
+                pinguim.x,
+                pinguim.y
+            )
+        }
+
+        ctx.restore()
     }
 }
-
 function obterChao(x) {
-
-    if (x < 160) {
-        return 320
-    }
-
-    if (x < 500) {
-        return 400
-    }
-
-    return 360
+    return 399
 }
-
 function atualizar() {
 
 if (teclas.a) {
@@ -196,10 +202,13 @@ window.addEventListener("keydown", (ev) => {
         teclas.d = true
     }
 
-    if (ev.code === "KeyW" && pinguim.noChao) {
-        pinguim.velocidadeY = forcaSalto
-        pinguim.noChao = false
-    }
+   if (ev.code === "KeyW" && pinguim.noChao) {
+
+    console.log("SALTO")
+
+    pinguim.velocidadeY = forcaSalto
+    pinguim.noChao = false
+}
 })
 
 window.addEventListener("keyup", (ev) => {
