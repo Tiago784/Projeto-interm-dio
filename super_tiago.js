@@ -6,16 +6,7 @@ const passos = 5
 
 const gravidade = 0.6
 const forcaSalto = -15
-const run1 = new Image()
-run1.src = "imagens/super_tiago/run1.png"
 
-run1.onload = () => {
-    console.log("RUN1 CARREGADA")
-}
-
-run1.onerror = () => {
-    console.log("ERRO RUN1")
-}
 let sceneId = 0
 
 const cenarios = [
@@ -80,17 +71,14 @@ function desenhar() {
 
 function obterChao(x) {
 
-    // plataforma esquerda
     if (x < 160) {
         return 320
     }
 
-    // parte central
     if (x < 500) {
         return 400
     }
 
-    // zona da porta
     return 360
 }
 
@@ -124,6 +112,7 @@ function atualizar() {
             pinguim.y = yChao
             pinguim.velocidadeY = 0
             pinguim.noChao = true
+
         } else {
 
             pinguim.noChao = false
@@ -172,58 +161,6 @@ window.addEventListener("keyup", (ev) => {
 
     if (ev.code === "KeyD") {
         teclas.d = false
-    }
-
-    // Entrar no poço
-    if (ev.code === "ArrowDown") {
-
-        const juntoAoPoco =
-            pinguim.x >= poco.x &&
-            pinguim.x <= poco.x + poco.largura
-
-        if (sceneId === 0 && juntoAoPoco) {
-
-            sceneId = 1
-
-            pinguim.x = 80
-        }
-    }
-
-    // Sair do poço
-    if (ev.code === "ArrowUp") {
-
-        if (sceneId === 1) {
-
-            sceneId = 0
-
-            pinguim.x = 430
-        }
-    }
-
-    // Entrar na porta
-    if (ev.code === "ArrowRight") {
-
-        const juntoDaPorta =
-            pinguim.x >= portaSubterranea.x &&
-            pinguim.x <= portaSubterranea.x + portaSubterranea.largura
-
-        if (sceneId === 1 && juntoDaPorta) {
-
-            sceneId = 2
-
-            pinguim.x = 80
-        }
-    }
-
-    // Voltar
-    if (ev.code === "ArrowLeft") {
-
-        if (sceneId === 2) {
-
-            sceneId = 1 
-
-            pinguim.x = 520
-        }
     }
 })
 
