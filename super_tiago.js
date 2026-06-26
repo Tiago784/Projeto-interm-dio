@@ -7,7 +7,7 @@ const mycanvas = document.getElementById("mycanvas")
 const ctx = mycanvas.getContext("2d")
 
 const floor = 399
-const passos = 5
+const passos = 1
 
 const gravidade = 0.6
 const forcaSalto = -15
@@ -202,14 +202,12 @@ window.addEventListener("keydown", (ev) => {
         teclas.d = true
     }
 
-   if (ev.code === "KeyW" && pinguim.noChao) {
+  if (ev.code === "KeyW") {
 
-    console.log("SALTO")
-
-    pinguim.velocidadeY = forcaSalto
+    pinguim.velocidadeY = -18
     pinguim.noChao = false
-}
-})
+}    
+)
 
 window.addEventListener("keyup", (ev) => {
 
