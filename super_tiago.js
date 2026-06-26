@@ -29,7 +29,8 @@ const pinguim = {
     x: 300,
     y: 0,
     velocidadeY: 0,
-    noChao: false
+    noChao: false,
+    direcao: 1
 }
 
 pinguim.image.src = "imagens/super_tiago/seylah_idle.png"
@@ -109,13 +110,15 @@ function obterChao(x) {
 
 function atualizar() {
 
-    if (teclas.a) {
-        pinguim.x -= passos
-    }
+if (teclas.a) {
+    pinguim.x -= passos
+    pinguim.direcao = -1
+}
 
-    if (teclas.d) {
-        pinguim.x += passos
-    }
+if (teclas.d) {
+    pinguim.x += passos
+    pinguim.direcao = 1
+}
 
     pinguim.velocidadeY += gravidade
     pinguim.y += pinguim.velocidadeY
