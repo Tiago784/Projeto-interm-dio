@@ -34,22 +34,23 @@ const pinguim = {
 }
 
 // ── Plataformas por cenário ──────────────────────────────
+// Cenário 1: chão preto começa em Y≈390
 const plataformasCenario1 = [
-    { xInicio:   0, xFim: 165, y: 420 },
-    { xInicio: 165, xFim: 265, y: 420 },
-    { xInicio: 295, xFim: 500, y: 420 },
-    { xInicio: 500, xFim: 530, y: 380 },
-    { xInicio: 530, xFim: 640, y: 420 },
+    { xInicio:   0, xFim: 430, y: 390 },  // chão principal (antes do poço)
+    { xInicio: 460, xFim: 640, y: 390 },  // chão principal (depois do poço)
 ]
 
+// Cenário 2: plataformas interiores
 const plataformasCenario2 = [
-    { xInicio:   0, xFim: 420, y: 420 },
-    { xInicio: 470, xFim: 640, y: 420 },
+    { xInicio:   0, xFim: 160, y: 310 },  // plataforma esquerda (topo da caixa)
+    { xInicio: 160, xFim: 280, y: 210 },  // degrau intermédio esquerdo
+    { xInicio: 280, xFim: 500, y: 245 },  // plataforma central
+    { xInicio: 500, xFim: 640, y: 210 },  // plataforma direita
 ]
 
 // ── Poços ────────────────────────────────────────────────
 const pocos = [
-    { xInicio: 265, xFim: 295, destinoCenario: 1 },
+    { xInicio: 430, xFim: 460, destinoCenario: 1 },
 ]
 
 function plataformasAtuais() {
@@ -58,8 +59,8 @@ function plataformasAtuais() {
 
 // ── Posições de início por cenário ───────────────────────
 const iniciosPorCenario = [
-    { x: 300, y: 300 },
-    { x: 380, y: 300 },
+    { x: 300, y: 200 },
+    { x: 380, y: 100 },
 ]
 
 function posicionarNoInicio() {
@@ -134,6 +135,12 @@ function desenhar() {
         ctx.textAlign = "center"
         ctx.fillText("▼ S para descer", mycanvas.width / 2, 30)
     }
+
+    // DEBUG temporário - apaga quando estiver certo
+    ctx.fillStyle = "yellow"
+    ctx.font = "11px Arial"
+    ctx.textAlign = "left"
+    ctx.fillText("y: " + Math.round(pinguim.y) + "  chao: " + obterChao(pinguim.x + 24), 5, 15)
 }
 
 // ── Atualizar ─────────────────────────────────────────────
