@@ -63,16 +63,15 @@ function plataformasAtuais() {
 
 // ── Posições de início por cenário ───────────────────────
 const iniciosPorCenario = [
-    { x: 265, y: 210 },
-    { x: 380, y: 390 },
+    { x: 265, y: 146 },
+    { x: 380, y: 326 },
 ]
 
 function posicionarNoInicio() {
-    const alturaSprite = spriteOk(idleImg) ? idleImg.height : 64
     const inicio = iniciosPorCenario[sceneId]
     pinguim.x = inicio.x
-    pinguim.y = inicio.y - alturaSprite
-    pinguim.noChao = false
+    pinguim.y = inicio.y
+    pinguim.noChao = true
     pinguim.velocidadeY = 0
 }
 
@@ -182,12 +181,11 @@ function atualizar() {
     const poco = pocos.find(p => sceneId < p.destinoCenario && centroX >= p.xInicio && centroX <= p.xFim)
     if (poco && teclas.s && pinguim.noChao) {
         sceneId = poco.destinoCenario
-        const alturaS = spriteOk(idleImg) ? idleImg.height : 64
         const inicio = iniciosPorCenario[sceneId]
         pinguim.x = inicio.x
-        pinguim.y = inicio.y - alturaS
+        pinguim.y = inicio.y
         pinguim.velocidadeY = 0
-        pinguim.noChao = false
+        pinguim.noChao = true
     }
 }
 
@@ -217,12 +215,6 @@ window.addEventListener("keyup", function(ev) {
 
 // ── Início ────────────────────────────────────────────────
 window.onload = function() {
-    idleImg.onload = () => {
-        posicionarNoInicio()
-        loop()
-    }
-    if (spriteOk(idleImg)) {
-        posicionarNoInicio()
-        loop()
-    }
+    posicionarNoInicio()
+    loop()
 }
