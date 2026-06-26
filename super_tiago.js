@@ -174,7 +174,7 @@ window.addEventListener("keyup", (ev) => {
     if (ev.code === "KeyD") teclas.d = false
 })
 
-// ── Iniciar ──────────────────────────────────────────────
+// ── Inicia ──────────────────────────────────────────────
 window.onload = () => {
     // Garante que o personagem está posicionado mesmo se idle já carregou
     if (spriteCarregado(idleImg)) {
@@ -182,4 +182,4 @@ window.onload = () => {
         pinguim.noChao = true
     }
     loop()
-}
+} 
