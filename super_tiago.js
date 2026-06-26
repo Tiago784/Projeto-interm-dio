@@ -47,7 +47,7 @@ const plataformasCenario2 = [
     { xInicio: 422, xFim: 632, y: 182 },  
     { xInicio: 490, xFim: 632, y: 260 },  
 
-
+]
 const pocos = [
     { xInicio: 430, xFim: 460, destinoCenario: 1 },
 ]
