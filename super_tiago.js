@@ -69,6 +69,22 @@ function desenhar() {
     }
 }
 
+function obterChao(x) {
+
+    // plataforma esquerda
+    if (x < 160) {
+        return 320
+    }
+
+    // parte central
+    if (x < 500) {
+        return 400
+    }
+
+    // zona da porta
+    return 360
+}
+
 function atualizar() {
 
     if (teclas.a) {
@@ -87,12 +103,21 @@ function atualizar() {
         pinguim.image.naturalWidth > 0
     ) {
 
-        const yChao = floor - pinguim.image.height
+        const chao = obterChao(
+            pinguim.x + pinguim.image.width / 2
+        )
+
+        const yChao =
+            chao - pinguim.image.height
 
         if (pinguim.y >= yChao) {
+
             pinguim.y = yChao
             pinguim.velocidadeY = 0
             pinguim.noChao = true
+        } else {
+
+            pinguim.noChao = false
         }
 
         const limite =
@@ -107,7 +132,6 @@ function atualizar() {
         pinguim.x = 0
     }
 }
-
 function loop() {
     atualizar()
     desenhar()
