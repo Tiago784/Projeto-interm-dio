@@ -151,9 +151,29 @@ function atualizar() {
         }
     }
 
-    if (pinguim.x < 0) {
-        pinguim.x = 0
+   if (pinguim.x < 0) {
+    pinguim.x = 0
+}
+
+if (teclas.a || teclas.d) {
+
+    contadorAnimacao++
+
+    if (contadorAnimacao >= 10) {
+
+        contadorAnimacao = 0
+
+        frameAtual++
+
+        if (frameAtual >= runFrames.length) {
+            frameAtual = 0
+        }
     }
+
+} else {
+
+    frameAtual = 0
+}
     
 }
 
