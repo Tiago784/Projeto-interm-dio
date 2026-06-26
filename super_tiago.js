@@ -4,6 +4,9 @@ const ctx = mycanvas.getContext("2d")
 const floor = 399
 const passos = 5
 
+const gravidade = 0.6
+const forcaSalto = -12
+
 let sceneId = 0
 
 const cenarios = [
@@ -18,8 +21,12 @@ cenarios[2].src = "imagens/super_tiago/cenario03_fundo.png"
 
 const pinguim = {
     image: new Image(),
-    x: 300
+    x: 300,
+    y: 0,
+    velocidadeY: 0,
+    noChao: true
 }
+
 pinguim.image.src = "imagens/super_tiago/seylah_idle.png"
 
 const teclas = {
@@ -37,6 +44,10 @@ const portaSubterranea = {
     largura: 60
 }
 
+pinguim.image.onload = () => {
+    pinguim.y = floor - pinguim.image.height
+}
+
 function desenhar() {
 
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
@@ -52,29 +63,45 @@ function desenhar() {
         ctx.drawImage(
             pinguim.image,
             pinguim.x,
-            floor - pinguim.image.height
+            pinguim.y
         )
     }
 }
 
 function atualizar() {
 
+    // esquerda
     if (teclas.a) {
         pinguim.x -= passos
     }
 
+    // direita
     if (teclas.d) {
         pinguim.x += passos
     }
 
-    if (pinguim.x < 0) {
-        pinguim.x = 0
-    }
+    // gravidade
+    pinguim.velocidadeY += gravidade
+    pinguim.y += pinguim.velocidadeY
 
     if (
         pinguim.image.complete &&
         pinguim.image.naturalWidth > 0
     ) {
+
+        const yChao =
+            floor - pinguim.image.height
+
+        if (pinguim.y >= yChao) {
+
+            pinguim.y = yChao
+            pinguim.velocidadeY = 0
+            pinguim.noChao = true
+        }
+        else {
+            pinguim.noChao = false
+        }
+
         const limite =
             mycanvas.width - pinguim.image.width
 
@@ -82,11 +109,17 @@ function atualizar() {
             pinguim.x = limite
         }
     }
+
+    if (pinguim.x < 0) {
+        pinguim.x = 0
+    }
 }
 
 function loop() {
+
     atualizar()
     desenhar()
+
     requestAnimationFrame(loop)
 }
 
@@ -98,6 +131,15 @@ window.addEventListener("keydown", (ev) => {
 
     if (ev.key === "d" || ev.key === "D") {
         teclas.d = true
+    }
+
+    // salto
+    if (
+        (ev.key === "w" || ev.key === "W") &&
+        pinguim.noChao
+    ) {
+        pinguim.velocidadeY = forcaSalto
+        pinguim.noChao = false
     }
 })
 
@@ -111,6 +153,7 @@ window.addEventListener("keyup", (ev) => {
         teclas.d = false
     }
 
+    // Entrar no poço
     if (ev.code === "ArrowDown") {
 
         const juntoAoPoco =
@@ -120,19 +163,23 @@ window.addEventListener("keyup", (ev) => {
         if (sceneId === 0 && juntoAoPoco) {
 
             sceneId = 1
+
             pinguim.x = 80
         }
     }
 
+    // Sair do poço
     if (ev.code === "ArrowUp") {
 
         if (sceneId === 1) {
 
             sceneId = 0
+
             pinguim.x = 430
         }
     }
 
+    // Entrar na porta
     if (ev.code === "ArrowRight") {
 
         const juntoDaPorta =
@@ -142,15 +189,18 @@ window.addEventListener("keyup", (ev) => {
         if (sceneId === 1 && juntoDaPorta) {
 
             sceneId = 2
+
             pinguim.x = 80
         }
     }
 
+    // Voltar
     if (ev.code === "ArrowLeft") {
 
         if (sceneId === 2) {
 
             sceneId = 1
+
             pinguim.x = 520
         }
     }
