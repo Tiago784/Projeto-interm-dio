@@ -5,7 +5,7 @@ const floor = 399
 const passos = 5
 
 const gravidade = 0.6
-const forcaSalto = -12
+const forcaSalto = -15
 
 let sceneId = 0
 
@@ -24,7 +24,7 @@ const pinguim = {
     x: 300,
     y: 0,
     velocidadeY: 0,
-    noChao: true
+    noChao: false
 }
 
 pinguim.image.src = "imagens/super_tiago/seylah_idle.png"
@@ -46,6 +46,7 @@ const portaSubterranea = {
 
 pinguim.image.onload = () => {
     pinguim.y = floor - pinguim.image.height
+    pinguim.noChao = true
 }
 
 function desenhar() {
@@ -70,17 +71,14 @@ function desenhar() {
 
 function atualizar() {
 
-    // esquerda
     if (teclas.a) {
         pinguim.x -= passos
     }
 
-    // direita
     if (teclas.d) {
         pinguim.x += passos
     }
 
-    // gravidade
     pinguim.velocidadeY += gravidade
     pinguim.y += pinguim.velocidadeY
 
@@ -89,17 +87,12 @@ function atualizar() {
         pinguim.image.naturalWidth > 0
     ) {
 
-        const yChao =
-            floor - pinguim.image.height
+        const yChao = floor - pinguim.image.height
 
         if (pinguim.y >= yChao) {
-
             pinguim.y = yChao
             pinguim.velocidadeY = 0
             pinguim.noChao = true
-        }
-        else {
-            pinguim.noChao = false
         }
 
         const limite =
@@ -116,28 +109,22 @@ function atualizar() {
 }
 
 function loop() {
-
     atualizar()
     desenhar()
-
     requestAnimationFrame(loop)
 }
 
 window.addEventListener("keydown", (ev) => {
 
-    if (ev.key === "a" || ev.key === "A") {
+    if (ev.code === "KeyA") {
         teclas.a = true
     }
 
-    if (ev.key === "d" || ev.key === "D") {
+    if (ev.code === "KeyD") {
         teclas.d = true
     }
 
-    // salto
-    if (
-        (ev.key === "w" || ev.key === "W") &&
-        pinguim.noChao
-    ) {
+    if (ev.code === "KeyW" && pinguim.noChao) {
         pinguim.velocidadeY = forcaSalto
         pinguim.noChao = false
     }
@@ -145,11 +132,11 @@ window.addEventListener("keydown", (ev) => {
 
 window.addEventListener("keyup", (ev) => {
 
-    if (ev.key === "a" || ev.key === "A") {
+    if (ev.code === "KeyA") {
         teclas.a = false
     }
 
-    if (ev.key === "d" || ev.key === "D") {
+    if (ev.code === "KeyD") {
         teclas.d = false
     }
 
